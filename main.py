@@ -26,15 +26,4 @@ class PacmanGame:
             self.pacman_y += 2
             self.pacman_dir = 1
 
-    def draw(self):
-        pyxel.cls(0)
-        pyxel.circ(self.pacman_x, self.pacman_y, 8, pyxel.COLOR_YELLOW)
-        if self.pacman_dir == 0:
-            pyxel.tri(self.pacman_x, self.pacman_y, self.pacman_x + 8, self.pacman_y - 4, self.pacman_x + 8, self.pacman_y + 4, 0)
-        elif self.pacman_dir == 1:
-            pyxel.tri(self.pacman_x, self.pacman_y, self.pacman_x - 4, self.pacman_y + 8, self.pacman_x + 4, self.pacman_y + 8, 0)
-        elif self.pacman_dir == 2:
-            pyxel.tri(self.pacman_x, self.pacman_y, self.pacman_x - 8, self.pacman_y - 4, self.pacman_x - 8, self.pacman_y + 4, 0)
-        elif self.pacman_dir == 3:
-            pyxel.tri(self.pacman_x, self.pacman_y, self.pacman_x - 4, self.pacman_y - 8, self.pacman_x + 4, self.pacman_y - 8, 0)
 PacmanGame()
