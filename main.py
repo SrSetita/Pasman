@@ -9,7 +9,10 @@ class Pacman:
         self.x = x
         self.y = y
         
-    def input_direccion(self): #funcion que mueve el pacman usando WASD
+    def update(self): #funcion que mueve el pacman usando WASD
+
+        if pyxel.btn(pyxel.KEY_Q):
+            pyxel.quit()
 
         if pyxel.btn(pyxel.KEY_W):  # mover arriba
             self.direccion = "arriba"
@@ -23,6 +26,18 @@ class Pacman:
         elif pyxel.btn(pyxel.KEY_D):  # Move derecha
             self.direccion = "derecha"
             self.x += 2
+        
+    def draw(self):
+        pyxel.cls(0)
+        if self.direccion == "derecha":
+            pyxel.tri(self.pacman_x, self.pacman_y, self.pacman_x + 8, self.pacman_y - 4, self.pacman_x + 8, self.pacman_y + 4, 0)
+        elif self.direccion == "abajo":
+            pyxel.tri(self.pacman_x, self.pacman_y, self.pacman_x - 4, self.pacman_y + 8, self.pacman_x + 4, self.pacman_y + 8, 0)
+        elif self.direccion == "izquierda":
+            pyxel.tri(self.pacman_x, self.pacman_y, self.pacman_x - 8, self.pacman_y - 4, self.pacman_x - 8, self.pacman_y + 4, 0)
+        elif self.direccion == "arriba":
+            pyxel.tri(self.pacman_x, self.pacman_y, self.pacman_x - 4, self.pacman_y - 8, self.pacman_x + 4, self.pacman_y - 8, 0)
+
 
     
 
@@ -41,3 +56,4 @@ class Pared:
         self.posicionY = posicionY #posición en Y de la pared
         self.choque = choque #dice si un fantasma o pacman estas tocando la pared
 
+Pacman()
