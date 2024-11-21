@@ -38,5 +38,3 @@ class PacmanGame:
             pyxel.tri(self.pacman_x, self.pacman_y, self.pacman_x - 4, self.pacman_y - 8, self.pacman_x + 4, self.pacman_y - 8, 0)
 
 PacmanGame()
-
-#prueba github
