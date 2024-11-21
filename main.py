@@ -41,3 +41,5 @@ class Pared:
         self.posicionY = posicionY #posición en Y de la pared
         self.choque = choque #dice si un fantasma o pacman estas tocando la pared
 
+
+#esto es una prueba 
