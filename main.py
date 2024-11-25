@@ -50,7 +50,6 @@ class Fantasma:
         self.y = y
 
     def mover(self, pacman):
-        # Moverse hacia Pacman de forma simple (puedes mejorar esta lógica)
         if self.x < pacman.x:
             self.x += self.velocidad
         elif self.x > pacman.x:
@@ -71,14 +70,12 @@ class Consumible:
         self.y = y
 
     def activar(self, pacman):
-        # Si Pacman está en la misma posición que el consumible
         if pacman.x == self.x and pacman.y == self.y:
             if self.tipo == "fruta":
-                pacman.vidas += 1  # Aumentar vidas
+                pacman.vidas += 1
             elif self.tipo == "pildora":
-                pacman.poder = True  # Activar poder
+                pacman.poder = True
             elif self.tipo == "puntos":
-                # Ganar puntos
                 pass
             return True
         return False
@@ -87,7 +84,7 @@ class Consumible:
         if self.tipo == "fruta":
             pyxel.circ(self.x, self.y, 4, pyxel.COLOR_GREEN)
         elif self.tipo == "pildora":
-            pyxel.rect(self.x - 2, self.y - 2, 4, 4, pyxel.COLOR_BLUE)
+            pyxel.rect(self.x - 2, self.y - 2, 4, 4, pyxel.COLOR_NAVY)
         elif self.tipo == "puntos":
             pyxel.rect(self.x - 1, self.y - 1, 2, 2, pyxel.COLOR_WHITE)
 
@@ -100,7 +97,6 @@ class Pared:
         self.alto = alto
 
     def detectar_colision(self, pacman):
-        # Comprobar si Pacman colide con la pared (borde de la pared)
         if (self.posicionX < pacman.x < self.posicionX + self.ancho and 
             self.posicionY < pacman.y < self.posicionY + self.alto):
             return True
@@ -110,7 +106,6 @@ class Pared:
         pyxel.rect(self.posicionX, self.posicionY, self.ancho, self.alto, pyxel.COLOR_GRAY)
 
 
-# Inicialización de Pyxel y creación de instancias
 def update():
     pacman.input_direccion()
     pacman.mover()
@@ -125,8 +120,8 @@ def update():
     for pared in paredes:
         if pared.detectar_colision(pacman):
             pacman.vidas -= 1
-            pacman.x = 60  # Reposicionar a Pacman
-            pacman.y = 60
+            pacman.x = 160  # Reposicionar a Pacman en el centro
+            pacman.y = 120
 
 def draw():
     pacman.draw()
@@ -141,14 +136,14 @@ def draw():
         pared.draw()
 
 
-# Configuración inicial de Pyxel
-pyxel.init(160, 120)
+pyxel.init(320, 240, title="Pacman Game", fps=60)
 
-# Crear instancias
-pacman = Pacman(2, False, 60, 60)
-fantasmas = [Fantasma(1, "arriba", 20, 20), Fantasma(1, "abajo", 120, 80)]
-consumibles = [Consumible("fruta", 40, 40), Consumible("pildora", 120, 80), Consumible("puntos", 80, 40)]
-paredes = [Pared(30, 30, 50, 10), Pared(90, 40, 10, 50)]
+pacman = Pacman(2, False, 160, 120)
+fantasmas = [Fantasma(1, "arriba", 40, 40), Fantasma(1, "abajo", 280, 200)]
+consumibles = [Consumible("fruta", 80, 80), Consumible("pildora", 240, 200), Consumible("puntos", 160, 100)]
+paredes = [
+    Pared(30, 30, 100, 10), Pared(90, 40, 10, 50), Pared(150, 100, 120, 10), 
+    Pared(200, 150, 10, 60), Pared(30, 170, 100, 10)
+]
 
-# Ejecutar juego
 pyxel.run(update, draw)
