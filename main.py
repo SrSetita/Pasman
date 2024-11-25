@@ -23,7 +23,17 @@ class Pacman:
         elif pyxel.btn(pyxel.KEY_D):  # Move derecha
             self.direccion = "derecha"
             self.x += 2
-
+    def draw(self):
+        pyxel.cls(0)
+        pyxel.circ(self.pacman_x, self.pacman_y, 8, pyxel.COLOR_YELLOW)
+        if self.pacman_dir == "derecha":
+            pyxel.tri(self.pacman_x, self.pacman_y, self.pacman_x + 8, self.pacman_y - 4, self.pacman_x + 8, self.pacman_y + 4, 0)
+        elif self.pacman_dir == "abajo":
+            pyxel.tri(self.pacman_x, self.pacman_y, self.pacman_x - 4, self.pacman_y + 8, self.pacman_x + 4, self.pacman_y + 8, 0)
+        elif self.pacman_dir == "izquierda":
+            pyxel.tri(self.pacman_x, self.pacman_y, self.pacman_x - 8, self.pacman_y - 4, self.pacman_x - 8, self.pacman_y + 4, 0)
+        elif self.pacman_dir == "arriba":
+            pyxel.tri(self.pacman_x, self.pacman_y, self.pacman_x - 4, self.pacman_y - 8, self.pacman_x + 4, self.pacman_y - 8, 0)
     
 
 class Fantasma:
