@@ -194,7 +194,7 @@ consumibles = [Consumible("fruta", 80, 80), Consumible("pildora", 240, 200), Con
 
 # Mapa actualizado con más paredes
 paredes = [
-    Pared(0, 0, 320, 5), Pared(0, 0, 5, 240), Pared(0, 235, 320, 5), Pared(315, 0, 5, 240),
+    Pared(0, 0, 320, 5), Pared(0, 0, 5, 240), Pared(0, 235, 320, 10), Pared(315, 0, 10, 240),Pared (10, 10, 65, 5), Pared(70, 10, 5, 100)
 ]
 
 pyxel.run(update, draw)
