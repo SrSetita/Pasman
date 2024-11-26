@@ -1,4 +1,5 @@
 import pyxel
+import random
 
 class Pacman:
     def __init__(self, velocidad: int, poder: bool, x, y):
@@ -69,7 +70,6 @@ class Pared:
             return True
         return False
 
-    # Nuevo método para detectar colisión con una posición específica
     def detectar_colision_en_posicion(self, nueva_x, nueva_y):
         if (self.posicionX < nueva_x < self.posicionX + self.ancho and 
             self.posicionY < nueva_y < self.posicionY + self.alto):
@@ -88,15 +88,38 @@ class Fantasma:
         self.y = y
         self.punto_inicio = (x, y)  # Guardar el punto de inicio
 
-    def mover(self, pacman):
-        if self.x < pacman.x:
-            self.x += self.velocidad
-        elif self.x > pacman.x:
-            self.x -= self.velocidad
-        if self.y < pacman.y:
-            self.y += self.velocidad
-        elif self.y > pacman.y:
-            self.y -= self.velocidad
+    def mover(self, paredes):
+        nueva_x, nueva_y = self.x, self.y
+
+        if self.direccion == "arriba":
+            nueva_y -= self.velocidad
+        elif self.direccion == "abajo":
+            nueva_y += self.velocidad
+        elif self.direccion == "izquierda":
+            nueva_x -= self.velocidad
+        elif self.direccion == "derecha":
+            nueva_x += self.velocidad
+
+        # Verificar colisiones con los bordes de la pantalla
+        if nueva_x < 0 or nueva_x > pyxel.width - 8 or nueva_y < 0 or nueva_y > pyxel.height - 8:
+            self.cambiar_direccion()
+            return
+
+        # Verificar colisiones con las paredes
+        colision = False
+        for pared in paredes:
+            if pared.detectar_colision_en_posicion(nueva_x, nueva_y):
+                colision = True
+                break
+
+        if colision:
+            self.cambiar_direccion()
+        else:
+            self.x, self.y = nueva_x, nueva_y
+
+    def cambiar_direccion(self):
+        direcciones = ["arriba", "abajo", "izquierda", "derecha"]
+        self.direccion = random.choice(direcciones)
 
     def draw(self):
         pyxel.rect(self.x, self.y, 8, 8, pyxel.COLOR_RED)
@@ -147,7 +170,7 @@ def update():
                 fantasma.reset()
 
     for fantasma in fantasmas:
-        fantasma.mover(pacman)
+        fantasma.mover(paredes)
 
     for consumible in consumibles:
         if consumible.activar(pacman):
@@ -168,9 +191,10 @@ pyxel.init(320, 240, title="Pacman Game", fps=60)
 pacman = Pacman(2, False, 160, 120)
 fantasmas = [Fantasma(1, "arriba", 40, 40), Fantasma(1, "abajo", 280, 200)]
 consumibles = [Consumible("fruta", 80, 80), Consumible("pildora", 240, 200), Consumible("puntos", 160, 100)]
+
+# Mapa actualizado con más paredes
 paredes = [
-    Pared(30, 30, 100, 10), Pared(90, 40, 10, 50), Pared(150, 100, 120, 10), 
-    Pared(200, 150, 10, 60), Pared(30, 170, 100, 10)
+    Pared(0, 0, 320, 5), Pared(0, 0, 5, 240), Pared(0, 235, 320, 5), Pared(315, 0, 5, 240),
 ]
 
 pyxel.run(update, draw)
