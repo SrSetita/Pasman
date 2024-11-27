@@ -192,9 +192,17 @@ pacman = Pacman(2, False, 160, 120)
 fantasmas = [Fantasma(1, "arriba", 40, 40), Fantasma(1, "abajo", 280, 200)]
 consumibles = [Consumible("fruta", 80, 80), Consumible("pildora", 240, 200), Consumible("puntos", 160, 100)]
 
-# Mapa actualizado con más paredes
 paredes = [
-    Pared(0, 0, 320, 5), Pared(0, 0, 5, 240), Pared(0, 235, 320, 10), Pared(315, 0, 10, 240),Pared (10, 10, 65, 5), Pared(70, 10, 5, 100)
+    # Bordes del mapa
+    Pared(0, 0, 320, 5), Pared(0, 0, 5, 240), Pared(315, 0, 5, 240), Pared(0, 235, 320, 5),
+    
+
+    # Área de los fantasmas en el centro
+    Pared(100, 100, 55, 5),Pared(170, 100, 55, 5), Pared(100, 140, 125, 5), Pared(100, 100, 5, 45), Pared(220, 100, 5, 45),
+
+    # Paredes internas
+    Pared(100, 80, 125, 5),Pared(100, 60, 125, 5),Pared(100, 160, 125, 5),Pared(100, 180, 125, 5),Pared(60, 200, 5, 120),Pared(260, 200, 5, 120),
 ]
+
 
 pyxel.run(update, draw)
