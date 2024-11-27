@@ -195,10 +195,10 @@ paredes = [
     Pared(0, 0, 320, 5), Pared(0, 0, 5, 240), Pared(315, 0, 5, 240), Pared(0, 235, 320, 5),
     
     # Área de los fantasmas en el centro
-    Pared(100, 100, 55, 5), Pared(170, 100, 55, 5), Pared(100, 140, 125, 5), Pared(100, 100, 5, 45), Pared(220, 100, 5, 45),
+    Pared(100, 100, 53.25, 5), Pared(173.25, 100, 50, 5), Pared(100, 140, 125, 5), Pared(100, 100, 5, 45), Pared(220, 100, 5, 45),
 
     # Paredes internas
-    Pared(100, 80, 125, 5), Pared(100, 60, 125, 5), Pared(100, 160, 125, 5),
+    Pared(100, 75, 125, 5), Pared(100, 50, 125, 5), Pared(100, 165, 125, 5),
 ]
 
 pyxel.run(update, draw)
