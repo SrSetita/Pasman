@@ -9,6 +9,7 @@ class Pacman:
         self.vidas = 3
         self.x = x
         self.y = y
+        self.tamano_colision = 8  # Tamaño de colisión (radio de Pac-Man)
 
     def mover(self, paredes):
         nueva_x, nueva_y = self.x, self.y
@@ -23,12 +24,12 @@ class Pacman:
             nueva_x += self.velocidad
 
         # Verificar colisiones con los bordes de la pantalla
-        if nueva_x < 0 or nueva_x > pyxel.width - 8 or nueva_y < 0 or nueva_y > pyxel.height - 8:
+        if nueva_x < 0 or nueva_x > pyxel.width - self.tamano_colision * 2 or nueva_y < 0 or nueva_y > pyxel.height - self.tamano_colision * 2:
             return  # No mover si está fuera de los límites de la pantalla
 
         # Verificar si la nueva posición colisiona con alguna pared
         for pared in paredes:
-            if pared.detectar_colision_en_posicion(nueva_x, nueva_y):
+            if pared.detectar_colision_en_posicion(nueva_x, nueva_y, self.tamano_colision):
                 return  # No mover si hay colisión con una pared
 
         # Si no hay colisión, actualizamos la posición
@@ -46,7 +47,7 @@ class Pacman:
 
     def draw(self):
         pyxel.cls(0)
-        pyxel.circ(self.x, self.y, 8, pyxel.COLOR_YELLOW)
+        pyxel.circ(self.x, self.y, self.tamano_colision, pyxel.COLOR_YELLOW)
         if self.direccion == "derecha":
             pyxel.tri(self.x, self.y, self.x + 8, self.y - 4, self.x + 8, self.y + 4, 0)
         elif self.direccion == "abajo":
@@ -64,15 +65,12 @@ class Pared:
         self.ancho = ancho
         self.alto = alto
 
-    def detectar_colision(self, pacman):
-        if (self.posicionX < pacman.x < self.posicionX + self.ancho and 
-            self.posicionY < pacman.y < self.posicionY + self.alto):
-            return True
-        return False
-
-    def detectar_colision_en_posicion(self, nueva_x, nueva_y):
-        if (self.posicionX < nueva_x < self.posicionX + self.ancho and 
-            self.posicionY < nueva_y < self.posicionY + self.alto):
+    def detectar_colision_en_posicion(self, nueva_x, nueva_y, tamano_colision):
+        # Modificado para tomar en cuenta el tamaño de colisión
+        if (self.posicionX < nueva_x + tamano_colision and 
+            nueva_x - tamano_colision < self.posicionX + self.ancho and 
+            self.posicionY < nueva_y + tamano_colision and 
+            nueva_y - tamano_colision < self.posicionY + self.alto):
             return True
         return False
 
@@ -108,7 +106,7 @@ class Fantasma:
         # Verificar colisiones con las paredes
         colision = False
         for pared in paredes:
-            if pared.detectar_colision_en_posicion(nueva_x, nueva_y):
+            if pared.detectar_colision_en_posicion(nueva_x, nueva_y, 8):  # Los fantasmas tienen un tamaño de colisión de 8
                 colision = True
                 break
 
@@ -125,7 +123,7 @@ class Fantasma:
         pyxel.rect(self.x, self.y, 8, 8, pyxel.COLOR_RED)
 
     def colision_con_pacman(self, pacman):
-        if abs(self.x - pacman.x) < 8 and abs(self.y - pacman.y) < 8:
+        if abs(self.x - pacman.x) < pacman.tamano_colision * 2 and abs(self.y - pacman.y) < pacman.tamano_colision * 2:
             return True
         return False
 
@@ -196,13 +194,11 @@ paredes = [
     # Bordes del mapa
     Pared(0, 0, 320, 5), Pared(0, 0, 5, 240), Pared(315, 0, 5, 240), Pared(0, 235, 320, 5),
     
-
     # Área de los fantasmas en el centro
-    Pared(100, 100, 55, 5),Pared(170, 100, 55, 5), Pared(100, 140, 125, 5), Pared(100, 100, 5, 45), Pared(220, 100, 5, 45),
+    Pared(100, 100, 55, 5), Pared(170, 100, 55, 5), Pared(100, 140, 125, 5), Pared(100, 100, 5, 45), Pared(220, 100, 5, 45),
 
     # Paredes internas
-    Pared(100, 80, 125, 5),Pared(100, 60, 125, 5),Pared(100, 160, 125, 5),Pared(100, 180, 125, 5),Pared(60, 200, 5, 120),Pared(260, 200, 5, 120),
+    Pared(100, 80, 125, 5), Pared(100, 60, 125, 5), Pared(100, 160, 125, 5),
 ]
-
 
 pyxel.run(update, draw)
