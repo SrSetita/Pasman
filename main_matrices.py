@@ -221,6 +221,6 @@ pyxel.init(300, 240, title="Pacman Game", fps=60)
 paredes, consumibles = generar_mapa()
 
 pacman = Pacman(2, False, 167, 135)
-fantasmas = [Fantasma(1, "arriba", 40, 40), Fantasma(1, "abajo", 280, 200)]
+fantasmas = [Fantasma(1, "abajo", 30, 30), Fantasma(1, "arriba", 30, 190), Fantasma(1, "abajo", 190, 30), Fantasma(1, "arriba", 190, 190)]
 
 pyxel.run(update, draw)
