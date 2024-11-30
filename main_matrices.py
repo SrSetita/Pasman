@@ -16,7 +16,7 @@ MAPA = [
     [1, 3, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 3, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ]
-
+game_over = False  # Variable para controlar el estado del juego
 class Pacman:
     def __init__(self, velocidad: int, poder: bool, x, y):
         self.velocidad = velocidad
@@ -216,6 +216,11 @@ def generar_mapa():
     return paredes, consumibles
 
 def update():
+    global game_over  # Acceder a la variable global
+
+    if game_over:
+        return  # Si el juego ha terminado, no actualizamos nada
+
     pacman.input_direccion()
     pacman.mover(paredes)
     pacman.activar_poder()
@@ -232,13 +237,16 @@ def update():
             for fantasma in fantasmas:
                 fantasma.reset()  # Reiniciar la posición de los fantasmas
 
+    # Verificar si Pac-Man ha perdido todas las vidas
+    if pacman.vidas <= 0:
+        game_over = True  # Cambiar el estado del juego a 'terminado'
+
     # Mover fantasmas
     for fantasma in fantasmas:
         if fantasma.muerto:
             fantasma.muerte_tiempo -= 1  # Reducir el temporizador de muerte
             if fantasma.muerte_tiempo <= 0:
                 fantasma.reaparecer()  # Reaparecer el fantasma
-
         else:
             fantasma.mover(paredes)
 
@@ -249,7 +257,13 @@ def update():
             consumibles_restantes.append(consumible)
     consumibles[:] = consumibles_restantes
 
+
 def draw():
+    if game_over:
+        pyxel.cls(0)  # Limpiar la pantalla
+        pyxel.text(pyxel.width // 2 - 20, pyxel.height // 2, "GAME OVER", pyxel.COLOR_RED)  # Mostrar el mensaje en rojo
+        return  # No dibujar más objetos si el juego ha terminado
+
     pacman.draw()
     for fantasma in fantasmas:
         fantasma.draw()
@@ -258,6 +272,7 @@ def draw():
     for pared in paredes:
         pared.draw()
     pyxel.text(5, 5, f"Puntos: {pacman.puntos} Vidas: {pacman.vidas}", pyxel.COLOR_WHITE)
+
 
 # Inicialización del juego
 pyxel.init(300, 240, title="Pacman Game", fps=60)
