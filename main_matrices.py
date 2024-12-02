@@ -324,7 +324,7 @@ def draw():
         consumible.draw()
     for pared in paredes:
         pared.draw()
-    pyxel.text(5, 5, f"Puntos: {pacman.puntos} Vidas: {pacman.vidas}", pyxel.COLOR_WHITE)
+    pyxel.text(5, 5, f"Puntos: {pacman.puntos} Vidas: {pacman.vidas} Power-up: {int(pacman.poder_tiempo / 60)}", pyxel.COLOR_WHITE)
 
 
 # Inicialización del juego
