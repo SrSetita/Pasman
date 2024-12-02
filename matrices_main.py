@@ -212,7 +212,7 @@ class Fantasma:
 
         colision = False
         for pared in paredes:
-            if pared.detectar_colision_en_posicion(nueva_x, nueva_y, 8):  # Los fantasmas tienen un tamaño de colisión de 8
+            if pared.detectar_colision_en_posicion(nueva_x, nueva_y, 10):  # Los fantasmas tienen un tamaño de colisión de 10
                 colision = True
                 break
 
@@ -228,7 +228,7 @@ class Fantasma:
     def draw(self):
         if self.muerto:
             return  # No dibujamos el fantasma si está muerto
-        pyxel.rect(self.x, self.y, 8, 8, pyxel.COLOR_RED)
+        pyxel.blt(self.x, self.y, 1, 0, 0, 15, 15, pyxel.COLOR_RED)
 
     def colision_con_pacman(self, pacman):
         # Si el fantasma está en (0, 0), lo ignoramos ya que está "muerto"
@@ -282,7 +282,6 @@ class Consumible:
 def generar_mapa():
     paredes = []
     consumibles = []
-    
     for y, fila in enumerate(MAPA):
         for x, valor in enumerate(fila):
             if valor == 1:
@@ -310,7 +309,7 @@ def update():
 
         elif not pacman.poder and fantasma.colision_con_pacman(pacman):  # Si no tiene poder
             pacman.vidas -= 1
-            pacman.x, pacman.y = 210, 155  # Reiniciar posición de Pac-Man
+            pacman.x, pacman.y = 210, 90  # Reiniciar posición de Pac-Man
             for fantasma in fantasmas:
                 fantasma.reset()  # Reiniciar la posición de los fantasmas
 
@@ -348,16 +347,19 @@ def draw():
         consumible.draw()
     for pared in paredes:
         pared.draw()
-    pyxel.text(5, 5, f"Puntos: {pacman.puntos} Vidas: {pacman.vidas}", pyxel.COLOR_WHITE)
+    pyxel.text(5, 5, f"Puntos: {pacman.puntos} Vidas: {pacman.vidas} Power-up: {int(pacman.poder_tiempo / 60)}", pyxel.COLOR_WHITE)
 
 
 # Inicialización del juego
 pyxel.init(440, 380, title="Pacman Game", fps=60)
 
+#Cargamos los recursos
+pyxel.load("my_resource.pyxres")
+
 # Generar el mapa
 paredes, consumibles = generar_mapa()
 
-pacman = Pacman(2, False, 210, 155)
-fantasmas = [Fantasma(1, "abajo", 30, 30), Fantasma(1, "arriba", 30, 250), Fantasma(1, "abajo", 290, 30), Fantasma(1, "arriba", 370, 310)]
+pacman = Pacman(2, False, 210, 90)
+fantasmas = [Fantasma(1, "abajo", 210, 155), Fantasma(1, "arriba", 210, 155), Fantasma(1, "abajo", 210, 150), Fantasma(1, "arriba", 210, 155)]
 
 pyxel.run(update, draw)
