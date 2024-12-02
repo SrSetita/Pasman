@@ -71,6 +71,8 @@ MAPA3 = [
 ]
 
 game_over = False  # Variable para controlar el estado del juego
+inicio = True
+puntosmapa = 0
 class Pacman:
     def __init__(self, velocidad: int, poder: bool, x, y):
         self.velocidad = velocidad
@@ -83,7 +85,6 @@ class Pacman:
         self.tamano_colision = 8  # Tamaño de colisión (radio de Pac-Man)
         self.poder = False  # Si Pacman tiene poder
         self.poder_tiempo = 0  # Temporizador del poder
-        self.puntosmapa = 0
 
 
     def mover(self, paredes):
@@ -237,10 +238,12 @@ class Consumible:
         self.tipo = tipo
 
     def activar(self, pacman):
+        global puntosmapa
         # Verificar si Pacman está en la misma posición que el consumible
         if abs(self.x - pacman.x) < pacman.tamano_colision * 2 and abs(self.y - pacman.y) < pacman.tamano_colision * 2:
             if self.tipo == 2:  # Punto
                 pacman.puntos += 1
+                puntosmapa += 1
             elif self.tipo == 3:  # Power-up
                 pacman.poder = True
                 pacman.poder_tiempo = 600  # Duración del poder (en segundos)
@@ -260,14 +263,15 @@ class Consumible:
 def generar_mapa(pacman):
     paredes = []
     consumibles = []
-    if pacman.puntosmapa < 191:
+    global puntosmapa
+    if puntosmapa < 191:
         for y, fila in enumerate(MAPA):
             for x, valor in enumerate(fila):
                 if valor == 1:
                     paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
                 elif valor in [2, 3, 4]:
                     consumibles.append(Consumible(x * 20 + 10, y * 20 + 10, valor))  # Ajustar posición al centro de la celda
-    if pacman.puntosmapa >= 191:
+    if puntosmapa >= 191:
         for y, fila in enumerate(MAPA2):
             for x, valor in enumerate(fila):
                 if valor == 1:
@@ -278,8 +282,19 @@ def generar_mapa(pacman):
     return paredes, consumibles
 
 def update():
-    global game_over  # Acceder a la variable global
-
+    global game_over  # Acceder a las variables globales
+    global inicio  
+    global pacman  
+    global paredes  
+    global consumibles  
+    global fantasmas  
+    global puntosmapa
+    print (puntosmapa)
+    if puntosmapa == 191:
+        n = 0
+        while n < 1:
+            inicio = True
+            n += 1
     if game_over:
         return  # Si el juego ha terminado, no actualizamos nada
 
@@ -318,8 +333,14 @@ def update():
         if not consumible.activar(pacman):
             consumibles_restantes.append(consumible)
     consumibles[:] = consumibles_restantes
+    if inicio == True:
+        pacman = Pacman(2, False, 210, 90)
 
+        # Generar el mapa
+        paredes, consumibles = generar_mapa(pacman)
 
+        fantasmas = [Fantasma(1, "abajo", 210, 155), Fantasma(1, "arriba", 210, 155), Fantasma(1, "abajo", 210, 150), Fantasma(1, "arriba", 210, 155)]
+    inicio = False
 def draw():
     if game_over:
         pyxel.cls(0)  # Limpiar la pantalla
@@ -349,5 +370,7 @@ pacman = Pacman(2, False, 210, 90)
 paredes, consumibles = generar_mapa(pacman)
 
 fantasmas = [Fantasma(1, "abajo", 210, 155), Fantasma(1, "arriba", 210, 155), Fantasma(1, "abajo", 210, 150), Fantasma(1, "arriba", 210, 155)]
+
+
 
 pyxel.run(update, draw)
