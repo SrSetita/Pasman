@@ -85,10 +85,16 @@ class Pacman:
         self.tamano_colision = 8  # Tamaño de colisión (radio de Pac-Man)
         self.poder = False  # Si Pacman tiene poder
         self.poder_tiempo = 0  # Temporizador del poder
+    
+    def centrar_en_celda(self):
+        self.x = (self.x // 20) * 20 + 10
+        self.y = (self.y // 20) * 20 + 10
 
 
     def mover(self, paredes):
         nueva_x, nueva_y = self.x, self.y
+
+        self.centrar_en_celda()
 
         if self.direccion == "arriba":
             nueva_y -= self.velocidad
@@ -98,6 +104,7 @@ class Pacman:
             nueva_x -= self.velocidad
         elif self.direccion == "derecha":
             nueva_x += self.velocidad
+
 
         # Verificar colisiones con los bordes de la pantalla
         if nueva_x < 0 or nueva_x > pyxel.width - self.tamano_colision * 2 or nueva_y < 0 or nueva_y > pyxel.height - self.tamano_colision * 2:
