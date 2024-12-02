@@ -271,14 +271,14 @@ def generar_mapa(pacman):
     paredes = []
     consumibles = []
     global puntosmapa
-    if puntosmapa < 191:
+    if puntosmapa < 192:
         for y, fila in enumerate(MAPA):
             for x, valor in enumerate(fila):
                 if valor == 1:
                     paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
                 elif valor in [2, 3, 4]:
                     consumibles.append(Consumible(x * 20 + 10, y * 20 + 10, valor))  # Ajustar posición al centro de la celda
-    if puntosmapa >= 191:
+    if puntosmapa >= 192:
         for y, fila in enumerate(MAPA2):
             for x, valor in enumerate(fila):
                 if valor == 1:
@@ -296,7 +296,7 @@ def update():
     global consumibles  
     global fantasmas  
     global puntosmapa
-    if puntosmapa == 191:
+    if puntosmapa == 192:
         n = 0
         while n < 1:
             inicio = True
