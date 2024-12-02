@@ -189,7 +189,7 @@ class Fantasma:
 
         colision = False
         for pared in paredes:
-            if pared.detectar_colision_en_posicion(nueva_x, nueva_y, 8):  # Los fantasmas tienen un tamaño de colisión de 15
+            if pared.detectar_colision_en_posicion(nueva_x, nueva_y, 10):  # Los fantasmas tienen un tamaño de colisión de 10
                 colision = True
                 break
 
