@@ -155,7 +155,7 @@ class Pared:
         return False
 
     def draw(self):
-        pyxel.rect(self.posicionX, self.posicionY, self.ancho, self.alto, pyxel.COLOR_GRAY)
+        pyxel.blt(self.posicionX, self.posicionY,0,0,0, self.ancho, self.alto, pyxel.COLOR_GRAY)
 
 
 class Fantasma:
