@@ -289,7 +289,6 @@ def update():
     global consumibles  
     global fantasmas  
     global puntosmapa
-    print (puntosmapa)
     if puntosmapa == 191:
         n = 0
         while n < 1:
