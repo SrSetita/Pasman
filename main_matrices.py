@@ -404,7 +404,8 @@ def draw():
     global vidaspacman
     if game_over:
         pyxel.cls(0)  # Limpiar la pantalla
-        pyxel.text(pyxel.width // 2 - 20, pyxel.height // 2, "GAME OVER", pyxel.COLOR_RED)  # Mostrar el mensaje en rojo
+        pyxel.text(pyxel.width // 2 - 20, pyxel.height // 2, "GAME OVER", pyxel.COLOR_RED)
+        pyxel.text(pyxel.width // 2 - 20, pyxel.height // 2 + 10, f"Puntos: {puntospacman}", pyxel.COLOR_WHITE)
         return  # No dibujar más objetos si el juego ha terminado
 
     pacman.draw()
