@@ -168,12 +168,18 @@ class Pared:
 
 
 class Fantasma:
-    def __init__(self, velocidad: int, direccion, x, y):
+    def __init__(self, velocidad: int, direccion, x, y, pag, u, v, w, h, colkey):
         self.muerte_tiempo = 0  # Temporizador para la muerte
         self.velocidad = velocidad
         self.direccion = direccion
         self.x = x
         self.y = y
+        self.pag = pag
+        self.u = u
+        self.v = v
+        self.w = w
+        self.h = h
+        self.colkey = colkey
         self.punto_inicio = (x, y)  # Guardar el punto de inicio
         self.muerto = False  # El fantasma no está muerto por defecto
 
@@ -214,7 +220,7 @@ class Fantasma:
     def draw(self):
         if self.muerto:
             return  # No dibujamos el fantasma si está muerto
-        pyxel.blt(self.x, self.y, 1, 0, 0, 15, 15, pyxel.COLOR_RED)
+        pyxel.blt(self.x, self.y, self.pag, self.u, self.v, self.w, self.h, self.colkey)
 
     def colision_con_pacman(self, pacman):
         # Si el fantasma está en (0, 0), lo ignoramos ya que está "muerto"
@@ -345,7 +351,8 @@ def update():
         # Generar el mapa
         paredes, consumibles = generar_mapa(pacman)
 
-        fantasmas = [Fantasma(1, "abajo", 210, 155), Fantasma(1, "arriba", 210, 155), Fantasma(1, "abajo", 210, 150), Fantasma(1, "arriba", 210, 155)]
+        fantasmas = [Fantasma(1, "abajo", 210, 155, 1, 0, 0, 16, 16, pyxel.COLOR_GRAY), Fantasma(1, "arriba", 210, 155, 1, 0, 32, 16, 16, pyxel.COLOR_GRAY), Fantasma(1, "abajo", 210, 155, 1, 0, 64, 16, 16, pyxel.COLOR_GRAY), Fantasma(1, "arriba", 210, 155, 1, 0, 96, 16, 16, pyxel.COLOR_GRAY)]
+
     inicio = False
 def draw():
     if game_over:
@@ -375,7 +382,7 @@ pacman = Pacman(2, False, 210, 90)
 # Generar el mapa
 paredes, consumibles = generar_mapa(pacman)
 
-fantasmas = [Fantasma(1, "abajo", 210, 155), Fantasma(1, "arriba", 210, 155), Fantasma(1, "abajo", 210, 150), Fantasma(1, "arriba", 210, 155)]
+fantasmas = [Fantasma(1, "abajo", 210, 155, 1, 0, 0, 16, 16, pyxel.COLOR_GRAY), Fantasma(1, "arriba", 210, 155, 1, 0, 32, 16, 16, pyxel.COLOR_GRAY), Fantasma(1, "abajo", 210, 155, 1, 0, 64, 16, 16, pyxel.COLOR_GRAY), Fantasma(1, "arriba", 210, 155, 1, 0, 96, 16, 16, pyxel.COLOR_GRAY)]
 
 
 
