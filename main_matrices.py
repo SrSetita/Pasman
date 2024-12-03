@@ -218,7 +218,17 @@ class Fantasma:
             self.cambiar_direccion()
         else:
             self.x, self.y = nueva_x, nueva_y
-            
+                #teletransporte si borde
+        if nueva_x < 0:
+            nueva_x = 440 - 20
+        elif nueva_x > 440:
+            nueva_x = 0 + 20
+
+        if nueva_y < 0:
+            nueva_y = 390 - 20 - 10
+        elif nueva_y > 390 - 10:
+            nueva_y = 0 + 20
+
     def cambiar_direccion(self):
         direcciones = ["arriba", "abajo", "izquierda", "derecha"]
         self.direccion = random.choice(direcciones)
