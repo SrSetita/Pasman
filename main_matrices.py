@@ -208,13 +208,9 @@ class Fantasma:
         elif self.direccion == "derecha":
             nueva_x += self.velocidad
 
-        if nueva_x < 0 or nueva_x > pyxel.width - 8 or nueva_y < 0 or nueva_y > pyxel.height - 8:
-            self.cambiar_direccion()
-            return
-
         colision = False
         for pared in paredes:
-            if pared.detectar_colision_en_posicion(nueva_x, nueva_y, 8):  # Los fantasmas tienen la colision del sprite
+            if pared.detectar_colision_en_posicion(nueva_x + 8, nueva_y + 8, 8):  # Los fantasmas tienen la colision del sprite
                 colision = True
                 break
 
@@ -222,7 +218,7 @@ class Fantasma:
             self.cambiar_direccion()
         else:
             self.x, self.y = nueva_x, nueva_y
-
+            
     def cambiar_direccion(self):
         direcciones = ["arriba", "abajo", "izquierda", "derecha"]
         self.direccion = random.choice(direcciones)
