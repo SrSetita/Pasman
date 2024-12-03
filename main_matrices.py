@@ -71,6 +71,7 @@ MAPA3 = [
 ]
 
 game_over = False  # Variable para controlar el estado del juego
+victoria = False
 inicio = True
 puntosmapa = 0
 puntospacman = 0
@@ -337,11 +338,16 @@ def update():
     global puntosmapa
     global puntospacman
     global vidaspacman
+    global victoria
     if puntosmapa == 192 or puntosmapa == 386:
         n = 0
         while n < 1:
             inicio = True
             n += 1
+    if puntosmapa == 612:
+        victoria = True
+    if victoria:
+        return
     if game_over:
         return  # Si el juego ha terminado, no actualizamos nada
 
@@ -405,6 +411,11 @@ def draw():
     if game_over:
         pyxel.cls(0)  # Limpiar la pantalla
         pyxel.text(pyxel.width // 2 - 20, pyxel.height // 2, "GAME OVER", pyxel.COLOR_RED)
+        pyxel.text(pyxel.width // 2 - 20, pyxel.height // 2 + 10, f"Puntos: {puntospacman}", pyxel.COLOR_WHITE)
+        return  # No dibujar más objetos si el juego ha terminado
+    if victoria:
+        pyxel.cls(0)  # Limpiar la pantalla
+        pyxel.text(pyxel.width // 2 - 20, pyxel.height // 2, "VICTORIA", pyxel.COLOR_YELLOW)
         pyxel.text(pyxel.width // 2 - 20, pyxel.height // 2 + 10, f"Puntos: {puntospacman}", pyxel.COLOR_WHITE)
         return  # No dibujar más objetos si el juego ha terminado
 
