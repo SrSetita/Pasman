@@ -180,6 +180,9 @@ class Fantasma:
         self.w = w
         self.h = h
         self.colkey = colkey
+        self.velocidad_original = velocidad
+        self.u_original = u
+        self.v_original = v
         self.punto_inicio = (x, y)  # Guardar el punto de inicio
         self.muerto = False  # El fantasma no está muerto por defecto
 
@@ -204,7 +207,7 @@ class Fantasma:
 
         colision = False
         for pared in paredes:
-            if pared.detectar_colision_en_posicion(nueva_x, nueva_y, 10):  # Los fantasmas tienen un tamaño de colisión de 10
+            if pared.detectar_colision_en_posicion(nueva_x, nueva_y, 8):  # Los fantasmas tienen un tamaño de colisión de 8
                 colision = True
                 break
 
@@ -243,6 +246,10 @@ class Fantasma:
     def reset(self):
         self.x, self.y = self.punto_inicio
         self.muerto = False  # Asegurarse de que el fantasma no esté muerto al reiniciar
+    def debil(self):
+        self.velocidad = 0.5
+        self.u = 0
+        self.v = 128
 
 class Consumible:
     def __init__(self, x, y, tipo):
@@ -316,6 +323,9 @@ def update():
 
     # Verificar si Pac-Man colisiona con algún fantasma
     for fantasma in fantasmas:
+        if pacman.poder:
+            fantasma.debil()
+            
         if pacman.poder and fantasma.colision_con_pacman(pacman):  # Si Pac-Man tiene poder
             fantasma.morir()  # Matar al fantasma
             pacman.puntos += 10  # Ganar puntos por matar al fantasma (opcional)
@@ -332,6 +342,12 @@ def update():
 
     # Mover fantasmas
     for fantasma in fantasmas:
+        if pacman.poder:
+            fantasma.debil()
+        else:
+            fantasma.velocidad = fantasma.velocidad_original
+            fantasma.u = fantasma.u_original
+            fantasma.v = fantasma.v_original
         if fantasma.muerto:
             fantasma.muerte_tiempo -= 1  # Reducir el temporizador de muerte
             if fantasma.muerte_tiempo <= 0:
