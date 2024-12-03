@@ -1,0 +1,91 @@
+import pyxel
+import random
+class Fantasma:
+    def __init__(self, velocidad: int, direccion, x, y, pag, u, v, w, h, colkey):
+        self.muerte_tiempo = 0  # Temporizador para la muerte
+        self.velocidad = velocidad
+        self.direccion = direccion
+        self.x = x
+        self.y = y
+        self.pag = pag
+        self.u = u
+        self.v = v
+        self.w = w
+        self.h = h
+        self.colkey = colkey
+        self.velocidad_original = velocidad
+        self.u_original = u
+        self.v_original = v
+        self.punto_inicio = (x, y)  # Guardar el punto de inicio
+        self.muerto = False  # El fantasma no está muerto por defecto
+
+    def mover(self, paredes):
+        if self.muerto:  # Si está muerto, no se mueve
+            return
+
+        nueva_x, nueva_y = self.x, self.y
+    
+        if self.direccion == "arriba":
+            nueva_y -= self.velocidad
+        elif self.direccion == "abajo":
+            nueva_y += self.velocidad
+        elif self.direccion == "izquierda":
+            nueva_x -= self.velocidad
+        elif self.direccion == "derecha":
+            nueva_x += self.velocidad
+
+        colision = False
+        for pared in paredes:
+            if pared.detectar_colision_en_posicion(nueva_x + 8, nueva_y + 8, 8):  # Los fantasmas tienen la colision del sprite
+                colision = True
+                break
+
+        if colision:
+            self.cambiar_direccion()
+        else:
+            self.x, self.y = nueva_x, nueva_y
+                #teletransporte si borde
+        if nueva_x < 0:
+            nueva_x = 440 - 20
+        elif nueva_x > 440:
+            nueva_x = 0 + 20
+
+        if nueva_y < 0:
+            nueva_y = 390 - 20 - 10
+        elif nueva_y > 390 - 10:
+            nueva_y = 0 + 20
+
+    def cambiar_direccion(self):
+        direcciones = ["arriba", "abajo", "izquierda", "derecha"]
+        self.direccion = random.choice(direcciones)
+
+    def draw(self):
+        if self.muerto:
+            return  # No dibujamos el fantasma si está muerto
+        pyxel.blt(self.x, self.y, self.pag, self.u, self.v, self.w, self.h, self.colkey)
+
+    def colision_con_pacman(self, pacman):
+        # Si el fantasma está en (0, 0), lo ignoramos ya que está "muerto"
+        if self.x == 0 and self.y == 0:
+            return False
+        
+        if abs(self.x - pacman.x) < pacman.tamano_colision * 2 and abs(self.y - pacman.y) < pacman.tamano_colision * 2:
+            return True
+        return False
+
+    def morir(self):
+        self.muerto = True  # El fantasma está muerto
+        self.x, self.y = 0, 0  # Enviamos el fantasma a una posición fuera de la pantalla
+        self.muerte_tiempo = 300  # Temporizador de 5 segundos (300 frames a 60 fps)
+
+    def reaparecer(self):
+        self.muerto = False  # El fantasma ya no está muerto
+        self.x, self.y = self.punto_inicio  # Reiniciar a su posición inicial
+
+    def reset(self):
+        self.x, self.y = self.punto_inicio
+        self.muerto = False  # Asegurarse de que el fantasma no esté muerto al reiniciar
+    def debil(self):
+        self.velocidad = 0.5
+        self.u = 0
+        self.v = 128
