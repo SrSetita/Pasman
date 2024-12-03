@@ -121,7 +121,7 @@ def update():
         while n < 1:
             vg.inicio = True
             n += 1
-    if vg.puntosmapa == 613:
+    if vg.puntosmapa == 614:
         vg.victoria = True
     if vg.victoria:
         return
