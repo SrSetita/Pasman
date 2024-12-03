@@ -344,7 +344,7 @@ def update():
         while n < 1:
             inicio = True
             n += 1
-    if puntosmapa == 612:
+    if puntosmapa == 613:
         victoria = True
     if victoria:
         return
