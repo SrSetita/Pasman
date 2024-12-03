@@ -149,7 +149,7 @@ def update():
 
     # Verificar si Pac-Man ha perdido todas las vidas
     if vg.vidaspacman <= 0:
-        game_over = True  # Cambiar el estado del juego a 'terminado'
+        vg.game_over = True  # Cambiar el estado del juego a 'terminado'
 
     # Mover fantasmas
     for fantasma in fantasmas:
