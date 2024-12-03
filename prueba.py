@@ -94,6 +94,8 @@ GAME_OVER= [
 ]
 
 game_over = False  # Variable para controlar el estado del juego
+inicio = True
+puntosmapa = 0
 class Pacman:
     def __init__(self, velocidad: int, poder: bool, x, y):
         self.velocidad = velocidad
@@ -106,10 +108,16 @@ class Pacman:
         self.tamano_colision = 8  # Tamaño de colisión (radio de Pac-Man)
         self.poder = False  # Si Pacman tiene poder
         self.poder_tiempo = 0  # Temporizador del poder
+    
+    def centrar_en_celda(self):
+        self.x = (self.x // 20) * 20 + 10
+        self.y = (self.y // 20) * 20 + 10
 
 
     def mover(self, paredes):
         nueva_x, nueva_y = self.x, self.y
+
+        self.centrar_en_celda()
 
         if self.direccion == "arriba":
             nueva_y -= self.velocidad
@@ -120,14 +128,22 @@ class Pacman:
         elif self.direccion == "derecha":
             nueva_x += self.velocidad
 
-        # Verificar colisiones con los bordes de la pantalla
-        if nueva_x < 0 or nueva_x > pyxel.width - self.tamano_colision * 2 or nueva_y < 0 or nueva_y > pyxel.height - self.tamano_colision * 2:
-            return  # No mover si está fuera de los límites de la pantalla
 
         # Verificar si la nueva posición colisiona con alguna pared
         for pared in paredes:
             if pared.detectar_colision_en_posicion(nueva_x, nueva_y, self.tamano_colision):
                 return  # No mover si hay colisión con una pared
+
+        #teletransporte si borde
+        if nueva_x < 0:
+            nueva_x = 440 - 20
+        elif nueva_x > 440:
+            nueva_x = 0 + 20
+
+        if nueva_y < 0:
+            nueva_y = 390 - 20 - 10
+        elif nueva_y > 390 - 10:
+            nueva_y = 0 + 20
 
         # Si no hay colisión, actualizamos la posición
         self.x, self.y = nueva_x, nueva_y
@@ -181,27 +197,42 @@ class Pared:
         pyxel.blt(self.posicionX, self.posicionY,0,0,0, self.ancho, self.alto, pyxel.COLOR_GRAY)
 
 
+import pyxel
+import random
+
+import pyxel
+import random
+
 class Fantasma:
-    def __init__(self, velocidad: int, direccion, x, y):
-        self.muerte_tiempo = 0  # Temporizador para la muerte
+    def __init__(self, velocidad: int, direccion, x, y, pag, u, v, w, h, colkey):
+        self.muerte_tiempo = 0
         self.velocidad = velocidad
         self.direccion = direccion
         self.x = x
         self.y = y
-        self.punto_inicio = (x, y)  # Guardar el punto de inicio
-        self.muerto = False  # El fantasma no está muerto por defecto
-        #Sprites para animación
-        self.sprite1 = sprite1  # Coordenadas (u, v) del primer sprite
-        self.sprite2 = sprite2  # Coordenadas (u, v) del segundo sprite
-        self.animacion_contador = 0  # Contador para animar sprites
+        self.pag = pag
+        self.u = u
+        self.v = v
+        self.w = w
+        self.h = h
+        self.colkey = colkey
+        self.velocidad_original = velocidad
+        self.u_original = u 
+        self.v_original = v 
+        self.punto_inicio = (x, y)
+        self.muerto = False
+        self.debil_estado = False
 
+        # Coordenadas de sprites
+        self.sprite_coords_vivo = [(u, v), (u + 16, v)]  # Moviéndose
+        self.sprite_coords_debil = [(0, 48), (16, 48)]  # Débil
 
     def mover(self, paredes):
-        if self.muerto:  # Si está muerto, no se mueve
+        if self.muerto:
             return
 
         nueva_x, nueva_y = self.x, self.y
-    
+
         if self.direccion == "arriba":
             nueva_y -= self.velocidad
         elif self.direccion == "abajo":
@@ -211,15 +242,14 @@ class Fantasma:
         elif self.direccion == "derecha":
             nueva_x += self.velocidad
 
-        if nueva_x < 0 or nueva_x > pyxel.width - 8 or nueva_y < 0 or nueva_y > pyxel.height - 8:
+        if nueva_x < 0 or nueva_x > pyxel.width - self.w or nueva_y < 0 or nueva_y > pyxel.height - self.h:
             self.cambiar_direccion()
             return
 
-        colision = False
-        for pared in paredes:
-            if pared.detectar_colision_en_posicion(nueva_x, nueva_y, 10):  # Los fantasmas tienen un tamaño de colisión de 10
-                colision = True
-                break
+        colision = any(
+            pared.detectar_colision_en_posicion(nueva_x, nueva_y, self.w)
+            for pared in paredes
+        )
 
         if colision:
             self.cambiar_direccion()
@@ -227,71 +257,54 @@ class Fantasma:
             self.x, self.y = nueva_x, nueva_y
 
     def cambiar_direccion(self):
-        direcciones = ["arriba", "abajo", "izquierda", "derecha"]
-        self.direccion = random.choice(direcciones)
+        self.direccion = random.choice(["arriba", "abajo", "izquierda", "derecha"])
 
     def draw(self):
-        # Alternar entre sprite1 y sprite2 cada 30 frames
-        self.animacion_contador += 1
-        if (self.animacion_contador // 30) % 2 == 0:
-            u, v = self.sprite1
-        else:
-            u, v = self.sprite2
+        """
+        Dibuja el fantasma alternando sprites si está vivo,
+        usando sprites alternativos si está débil.
+        """
+        if self.muerto:
+            return  # No dibujamos el fantasma si está muerto
 
-        pyxel.blt(self.x, self.y, 1, u, v, 15, 15, pyxel.COLOR_BLACK)
+        if self.debil_estado:
+            # Alternar sprites débil cada 30 frames
+            frame_index = (pyxel.frame_count // 30) % len(self.sprite_coords_debil)
+            u, v = self.sprite_coords_debil[frame_index]
+        else:
+            # Alternar sprites vivo cada 30 frames
+            frame_index = (pyxel.frame_count // 30) % len(self.sprite_coords_vivo)
+            u, v = self.sprite_coords_vivo[frame_index]
+
+        pyxel.blt(self.x, self.y, self.pag, u, v, self.w, self.h, self.colkey)
 
     def colision_con_pacman(self, pacman):
-        # Si el fantasma está en (0, 0), lo ignoramos ya que está "muerto"
         if self.x == 0 and self.y == 0:
             return False
-        
-        if abs(self.x - pacman.x) < pacman.tamano_colision * 2 and abs(self.y - pacman.y) < pacman.tamano_colision * 2:
-            return True
-        return False
+        return abs(self.x - pacman.x) < pacman.tamano_colision * 2 and abs(self.y - pacman.y) < pacman.tamano_colision * 2
 
     def morir(self):
-        self.muerto = True  # El fantasma está muerto
-        self.x, self.y = 0, 0  # Enviamos el fantasma a una posición fuera de la pantalla
-        self.muerte_tiempo = 300  # Temporizador de 5 segundos (300 frames a 60 fps)
+        self.muerto = True
+        self.x, self.y = 0, 0  # Enviar a una posición fuera de la pantalla
+        self.muerte_tiempo = 300
 
     def reaparecer(self):
-        self.muerto = False  # El fantasma ya no está muerto
-        self.x, self.y = self.punto_inicio  # Reiniciar a su posición inicial
+        self.muerto = False
+        self.x, self.y = self.punto_inicio
 
     def reset(self):
         self.x, self.y = self.punto_inicio
-        self.muerto = False  # Asegurarse de que el fantasma no esté muerto al reiniciar
+        self.muerto = False
 
-"""class Blinky(Fantasma):
-    def draw(self):
-        if self.muerto:
-            return
-        pyxel.blt(self.x, self.y, 1, 0, 64, 15, 15, pyxel.COLOR_BLACK)  # Sprite de Blinky"""
+    def debil(self):
+        self.debil_estado = True
+        self.velocidad = 0.5
 
-
-class Pinky(Fantasma):
-    def draw(self):
-        if self.muerto:
-            return
-        def __init__(self, velocidad, direccion, x, y):
-        # Coordenadas de los sprites específicos para Pinky
-        sprite1 = (16, 0)  # Primer sprite
-        sprite2 = (32, 0)  # Segundo sprite
-        super().__init__(velocidad, direccion, x, y, sprite1, sprite2)
+    def restaurar_estado(self):
+        self.debil_estado = False
+        self.velocidad = self.velocidad_original
 
 
-"""class Inky(Fantasma):
-    def draw(self):
-        if self.muerto:
-            return
-        pyxel.blt(self.x, self.y, 1, 0, 32, 15, 15, pyxel.COLOR_BLACK)  # Sprite de Inky
-
-
-class Clyde(Fantasma):
-    def draw(self):
-        if self.muerto:
-            return
-        pyxel.blt(self.x, self.y, 1, 0, 96, 15, 15, pyxel.COLOR_BLACK)  # Sprite de Clyde"""
 
 class Consumible:
     def __init__(self, x, y, tipo):
@@ -300,10 +313,12 @@ class Consumible:
         self.tipo = tipo
 
     def activar(self, pacman):
+        global puntosmapa
         # Verificar si Pacman está en la misma posición que el consumible
         if abs(self.x - pacman.x) < pacman.tamano_colision * 2 and abs(self.y - pacman.y) < pacman.tamano_colision * 2:
             if self.tipo == 2:  # Punto
                 pacman.puntos += 1
+                puntosmapa += 1
             elif self.tipo == 3:  # Power-up
                 pacman.poder = True
                 pacman.poder_tiempo = 600  # Duración del poder (en segundos)
@@ -315,26 +330,56 @@ class Consumible:
         return False  # No activado
 
     def draw(self):
-        color = pyxel.COLOR_WHITE if self.tipo == 2 else (pyxel.COLOR_GREEN if self.tipo == 3 else pyxel.COLOR_PINK)
-        pyxel.rect(self.x - 1, self.y - 1, 2, 2, color)
+        if self.tipo == 2:  # Punto
+            pyxel.rect(self.x - 1, self.y - 1, 3, 3, pyxel.COLOR_WHITE)  # Dibuja el punto
+        elif self.tipo == 3:  # Power-up
+            pyxel.blt(self.x - 4, self.y - 4, 2, 4, 4, 8, 8, pyxel.COLOR_GRAY)  # Dibuja el power-up
+        elif self.tipo == 4:  # Fruta
+            pyxel.blt(self.x - 4, self.y - 4, 2, 20, 2, 15, 15, pyxel.COLOR_GRAY)  # Dibuja la fruta
 
 
 # Función para crear objetos a partir de la matriz
-def generar_mapa():
+def generar_mapa(pacman):
     paredes = []
     consumibles = []
-    for y, fila in enumerate(MAPA):
-        for x, valor in enumerate(fila):
-            if valor == 1:
-                paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
-            elif valor in [2, 3, 4]:
-                consumibles.append(Consumible(x * 20 + 10, y * 20 + 10, valor))  # Ajustar posición al centro de la celda
+    global puntosmapa
+    if puntosmapa < 192:
+        for y, fila in enumerate(MAPA):
+            for x, valor in enumerate(fila):
+                if valor == 1:
+                    paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
+                elif valor in [2, 3, 4]:
+                    consumibles.append(Consumible(x * 20 + 10, y * 20 + 10, valor))  # Ajustar posición al centro de la celda
+    if puntosmapa >= 192 and puntosmapa < 391:
+        for y, fila in enumerate(MAPA2):
+            for x, valor in enumerate(fila):
+                if valor == 1:
+                    paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
+                elif valor in [2, 3, 4]:
+                    consumibles.append(Consumible(x * 20 + 10, y * 20 + 10, valor))  # Ajustar posición al centro de la celda
+    if puntosmapa >= 391:
+        for y, fila in enumerate(MAPA3):
+            for x, valor in enumerate(fila):
+                if valor == 1:
+                    paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
+                elif valor in [2, 3, 4]:
+                    consumibles.append(Consumible(x * 20 + 10, y * 20 + 10, valor))  # Ajustar posición al centro de la celda
 
     return paredes, consumibles
 
 def update():
-    global game_over  # Acceder a la variable global
-
+    global game_over  # Acceder a las variables globales
+    global inicio  
+    global pacman  
+    global paredes  
+    global consumibles  
+    global fantasmas  
+    global puntosmapa
+    if puntosmapa == 192 or puntosmapa == 391:
+        n = 0
+        while n < 1:
+            inicio = True
+            n += 1
     if game_over:
         return  # Si el juego ha terminado, no actualizamos nada
 
@@ -344,6 +389,9 @@ def update():
 
     # Verificar si Pac-Man colisiona con algún fantasma
     for fantasma in fantasmas:
+        if pacman.poder:
+            fantasma.debil()
+            
         if pacman.poder and fantasma.colision_con_pacman(pacman):  # Si Pac-Man tiene poder
             fantasma.morir()  # Matar al fantasma
             pacman.puntos += 10  # Ganar puntos por matar al fantasma (opcional)
@@ -360,6 +408,12 @@ def update():
 
     # Mover fantasmas
     for fantasma in fantasmas:
+        if pacman.poder:
+            fantasma.debil()
+        else:
+            fantasma.velocidad = fantasma.velocidad_original
+            fantasma.u = fantasma.u_original
+            fantasma.v = fantasma.v_original
         if fantasma.muerto:
             fantasma.muerte_tiempo -= 1  # Reducir el temporizador de muerte
             if fantasma.muerte_tiempo <= 0:
@@ -373,8 +427,16 @@ def update():
         if not consumible.activar(pacman):
             consumibles_restantes.append(consumible)
     consumibles[:] = consumibles_restantes
+    if inicio == True:
+        pacman = Pacman(2, False, 210, 90)
+
+        # Generar el mapa
+        paredes, consumibles = generar_mapa(pacman)
+
+        fantasmas = [Fantasma(0.5, "abajo", 210, 155, 1, 0, 0, 16, 16, pyxel.COLOR_GRAY), Fantasma(1, "arriba", 210, 155, 1, 0, 32, 16, 16, pyxel.COLOR_GRAY), Fantasma(1.5, "abajo", 210, 155, 1, 32, 64, 16, 16, pyxel.COLOR_GRAY), Fantasma(2, "arriba", 210, 155, 1, 0, 96, 16, 16, pyxel.COLOR_GRAY)]
 
 
+    inicio = False
 def draw():
     if game_over:
         pyxel.cls(0)  # Limpiar la pantalla
@@ -397,10 +459,14 @@ pyxel.init(440, 395, title="Pacman Game", fps=60)
 #Cargamos los recursos
 pyxel.load("my_resource.pyxres")
 
-# Generar el mapa
-paredes, consumibles = generar_mapa()
-
+#Crear a pacman
 pacman = Pacman(2, False, 210, 90)
-#fantasmas = [Blinky(1, "abajo", 210, 155), Pinky(1, "arriba", 210, 155), Inky(1, "abajo", 210, 150), Clyde(1, "arriba", 210, 155)]
-fantasmas = [Pinky(1, "arriba", 210, 155)]
+
+# Generar el mapa
+paredes, consumibles = generar_mapa(pacman)
+
+fantasmas = [Fantasma(0.5, "abajo", 210, 155, 1, 0, 0, 16, 16, pyxel.COLOR_GRAY), Fantasma(1, "arriba", 210, 155, 1, 0, 0, 16, 16, pyxel.COLOR_GRAY), Fantasma(1.5, "abajo", 210, 155, 1, 0, 64, 16, 16, pyxel.COLOR_GRAY), Fantasma(2, "arriba", 210, 155, 1, 0, 96, 16, 16, pyxel.COLOR_GRAY)]
+
+
+
 pyxel.run(update, draw)
