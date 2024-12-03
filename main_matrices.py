@@ -106,14 +106,21 @@ class Pacman:
             nueva_x += self.velocidad
 
 
-        # Verificar colisiones con los bordes de la pantalla
-        if nueva_x < 0 or nueva_x > pyxel.width - self.tamano_colision * 2 or nueva_y < 0 or nueva_y > pyxel.height - self.tamano_colision * 2:
-            return  # No mover si está fuera de los límites de la pantalla
-
         # Verificar si la nueva posición colisiona con alguna pared
         for pared in paredes:
             if pared.detectar_colision_en_posicion(nueva_x, nueva_y, self.tamano_colision):
                 return  # No mover si hay colisión con una pared
+
+        #teletransporte si borde
+        if nueva_x < 0:
+            nueva_x = 440 - 20
+        elif nueva_x > 440:
+            nueva_x = 0 + 20
+
+        if nueva_y < 0:
+            nueva_y = 390 - 20 - 10
+        elif nueva_y > 390 - 10:
+            nueva_y = 0 + 20
 
         # Si no hay colisión, actualizamos la posición
         self.x, self.y = nueva_x, nueva_y
@@ -295,14 +302,14 @@ def generar_mapa(pacman):
                     paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
                 elif valor in [2, 3, 4]:
                     consumibles.append(Consumible(x * 20 + 10, y * 20 + 10, valor))  # Ajustar posición al centro de la celda
-    if puntosmapa >= 192 and puntosmapa < 387:
+    if puntosmapa >= 192 and puntosmapa < 391:
         for y, fila in enumerate(MAPA2):
             for x, valor in enumerate(fila):
                 if valor == 1:
                     paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
                 elif valor in [2, 3, 4]:
                     consumibles.append(Consumible(x * 20 + 10, y * 20 + 10, valor))  # Ajustar posición al centro de la celda
-    if puntosmapa >= 388:
+    if puntosmapa >= 391:
         for y, fila in enumerate(MAPA3):
             for x, valor in enumerate(fila):
                 if valor == 1:
@@ -320,7 +327,7 @@ def update():
     global consumibles  
     global fantasmas  
     global puntosmapa
-    if puntosmapa == 192 or puntosmapa == 388:
+    if puntosmapa == 192 or puntosmapa == 391:
         n = 0
         while n < 1:
             inicio = True
