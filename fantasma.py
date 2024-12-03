@@ -55,6 +55,8 @@ class Fantasma:
         elif nueva_y > 390 - 10:
             nueva_y = 0 + 20
 
+        self.x, self.y = nueva_x, nueva_y
+
     def cambiar_direccion(self):
         direcciones = ["arriba", "abajo", "izquierda", "derecha"]
         self.direccion = random.choice(direcciones)
