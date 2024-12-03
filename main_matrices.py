@@ -283,7 +283,7 @@ class Consumible:
             elif self.tipo == 3:  # Power-up
                 pacman.poder = True
                 pacman.poder_tiempo = 600  # Duración del poder (en segundos)
-                pacman.velocidad = 3  # Aumentar la velocidad de Pacman
+                pacman.velocidad = 2.5  # Aumentar la velocidad de Pacman
             elif self.tipo == 4:  # Fruta
                 puntospacman += 5
                 vidaspacman += 1
