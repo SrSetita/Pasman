@@ -178,7 +178,7 @@ class Pared:
         return False
 
     def draw(self):
-        pyxel.rect(self.posicionX, self.posicionY, self.ancho, self.alto, pyxel.COLOR_GRAY)
+        pyxel.blt(self.posicionX, self.posicionY,0,0,0, self.ancho, self.alto, pyxel.COLOR_GRAY)
 
 
 class Fantasma:
@@ -347,11 +347,11 @@ def draw():
         consumible.draw()
     for pared in paredes:
         pared.draw()
-    pyxel.text(5, 5, f"Puntos: {pacman.puntos} Vidas: {pacman.vidas} Power-up: {int(pacman.poder_tiempo / 60)}", pyxel.COLOR_WHITE)
+    pyxel.text(5, 385, f"Puntos: {pacman.puntos} Vidas: {pacman.vidas} Power-up: {int(pacman.poder_tiempo / 60)}", pyxel.COLOR_WHITE)
 
 
 # Inicialización del juego
-pyxel.init(440, 380, title="Pacman Game", fps=60)
+pyxel.init(440, 395, title="Pacman Game", fps=60)
 
 #Cargamos los recursos
 pyxel.load("my_resource.pyxres")
