@@ -408,7 +408,7 @@ def update():
         # Generar el mapa
         paredes, consumibles = generar_mapa(pacman)
 
-        fantasmas = [Fantasma(0.5, "abajo", 210, 155, 1, 0, 0, 16, 16, pyxel.COLOR_GRAY), Fantasma(1, "arriba", 210, 155, 1, 0, 32, 16, 16, pyxel.COLOR_GRAY), Fantasma(1.5, "abajo", 210, 155, 1, 0, 64, 16, 16, pyxel.COLOR_GRAY), Fantasma(2, "arriba", 210, 155, 1, 0, 96, 16, 16, pyxel.COLOR_GRAY)]
+        fantasmas = [Fantasma(0.5, "abajo", 210, 155, 1, 0, 0, 16, 16, pyxel.COLOR_GRAY), Fantasma(1, "arriba", 210, 155, 1, 0, 32, 16, 16, pyxel.COLOR_GRAY), Fantasma(1.5, "abajo", 210, 155, 1, 32, 64, 16, 16, pyxel.COLOR_GRAY), Fantasma(2, "arriba", 210, 155, 1, 0, 96, 16, 16, pyxel.COLOR_GRAY)]
 
 
     inicio = False
@@ -440,7 +440,7 @@ pacman = Pacman(2, False, 210, 90)
 # Generar el mapa
 paredes, consumibles = generar_mapa(pacman)
 
-fantasmas = [Fantasma(0.5, "abajo", 210, 155, 1, 0, 0, 16, 16, pyxel.COLOR_GRAY), Fantasma(1, "arriba", 210, 155, 1, 0, 32, 16, 16, pyxel.COLOR_GRAY), Fantasma(1.5, "abajo", 210, 155, 1, 0, 64, 16, 16, pyxel.COLOR_GRAY), Fantasma(2, "arriba", 210, 155, 1, 0, 96, 16, 16, pyxel.COLOR_GRAY)]
+fantasmas = [Fantasma(0.5, "abajo", 210, 155, 1, 0, 0, 16, 16, pyxel.COLOR_GRAY), Fantasma(1, "arriba", 210, 155, 1, 0, 0, 16, 16, pyxel.COLOR_GRAY), Fantasma(1.5, "abajo", 210, 155, 1, 0, 64, 16, 16, pyxel.COLOR_GRAY), Fantasma(2, "arriba", 210, 155, 1, 0, 96, 16, 16, pyxel.COLOR_GRAY)]
 
 
 
