@@ -70,9 +70,7 @@ MAPA3 = [
     
 ]
 import variables_globales as vg
-game_over = False  # Variable para controlar el estado del juego
-victoria = False
-inicio = True
+
 
 
 #importar clases
@@ -121,13 +119,13 @@ def update():
     if vg.puntosmapa == 192 or vg.puntosmapa == 386:
         n = 0
         while n < 1:
-            inicio = True
+            vg.inicio = True
             n += 1
     if vg.puntosmapa == 613:
-        victoria = True
-    if victoria:
+        vg.victoria = True
+    if vg.victoria:
         return
-    if game_over:
+    if vg.game_over:
         return  # Si el juego ha terminado, no actualizamos nada
 
     pacman.input_direccion()
@@ -174,7 +172,7 @@ def update():
         if not consumible.activar(pacman):
             consumibles_restantes.append(consumible)
     consumibles[:] = consumibles_restantes
-    if inicio == True:
+    if vg.inicio == True:
         pacman = Pacman(1.5, False, 210, 90)
 
         # Generar el mapa
@@ -183,14 +181,14 @@ def update():
         fantasmas = [Fantasma(0.5, "abajo", 210, 155, 1, 0, 0, 16, 16, pyxel.COLOR_GRAY), Fantasma(1, "arriba", 210, 155, 1, 0, 32, 16, 16, pyxel.COLOR_GRAY), Fantasma(1.5, "abajo", 210, 155, 1, 0, 64, 16, 16, pyxel.COLOR_GRAY), Fantasma(2, "arriba", 210, 155, 1, 0, 96, 16, 16, pyxel.COLOR_GRAY)]
 
 
-    inicio = False
+    vg.inicio = False
 def draw():
-    if game_over:
+    if vg.game_over:
         pyxel.cls(0)  # Limpiar la pantalla
         pyxel.text(pyxel.width // 2 - 20, pyxel.height // 2, "GAME OVER", pyxel.COLOR_RED)
         pyxel.text(pyxel.width // 2 - 20, pyxel.height // 2 + 10, f"Puntos: {vg.puntospacman}", pyxel.COLOR_WHITE)
         return  # No dibujar más objetos si el juego ha terminado
-    if victoria:
+    if vg.victoria:
         pyxel.cls(0)  # Limpiar la pantalla
         pyxel.text(pyxel.width // 2 - 20, pyxel.height // 2, "VICTORIA", pyxel.COLOR_YELLOW)
         pyxel.text(pyxel.width // 2 - 20, pyxel.height // 2 + 10, f"Puntos: {vg.puntospacman}", pyxel.COLOR_WHITE)
