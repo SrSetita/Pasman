@@ -280,6 +280,7 @@ class Fantasma:
         self.velocidad = 0.5
         self.u = 0
         self.v = 128
+        
 
 class Consumible:
     def __init__(self, x, y, tipo):
