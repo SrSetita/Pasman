@@ -275,8 +275,12 @@ class Consumible:
         return False  # No activado
 
     def draw(self):
-        color = pyxel.COLOR_WHITE if self.tipo == 2 else (pyxel.COLOR_GREEN if self.tipo == 3 else pyxel.COLOR_PINK)
-        pyxel.rect(self.x - 1, self.y - 1, 2, 2, color)
+        if self.tipo == 2:  # Punto
+            pyxel.rect(self.x - 1, self.y - 1, 3, 3, pyxel.COLOR_WHITE)  # Dibuja el punto
+        elif self.tipo == 3:  # Power-up
+            pyxel.blt(self.x - 4, self.y - 4, 2, 4, 4, 8, 8, pyxel.COLOR_GRAY)  # Dibuja el power-up
+        elif self.tipo == 4:  # Fruta
+            pyxel.blt(self.x - 4, self.y - 4, 2, 20, 2, 15, 15, pyxel.COLOR_GRAY)  # Dibuja la fruta
 
 
 # Función para crear objetos a partir de la matriz
