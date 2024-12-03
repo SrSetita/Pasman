@@ -283,7 +283,7 @@ class Consumible:
             elif self.tipo == 3:  # Power-up
                 pacman.poder = True
                 pacman.poder_tiempo = 600  # Duración del poder (en segundos)
-                pacman.velocidad = 2.5  # Aumentar la velocidad de Pacman
+                pacman.velocidad = 2  # Aumentar la velocidad de Pacman
             elif self.tipo == 4:  # Fruta
                 puntospacman += 5
                 vidaspacman += 1
@@ -396,7 +396,7 @@ def update():
             consumibles_restantes.append(consumible)
     consumibles[:] = consumibles_restantes
     if inicio == True:
-        pacman = Pacman(2, False, 210, 90)
+        pacman = Pacman(1.5, False, 210, 90)
 
         # Generar el mapa
         paredes, consumibles = generar_mapa(pacman)
@@ -436,7 +436,7 @@ pyxel.init(440, 395, title="Pacman Game", fps=60)
 pyxel.load("my_resource.pyxres")
 
 #Crear a pacman
-pacman = Pacman(2, False, 210, 90)
+pacman = Pacman(1.5, False, 210, 90)
 
 # Generar el mapa
 paredes, consumibles = generar_mapa(pacman)
