@@ -225,10 +225,10 @@ class Fantasma:
         direcciones = ["arriba", "abajo", "izquierda", "derecha"]
         self.direccion = random.choice(direcciones)
 
-    def draw(self):
+    """def draw(self):
         if self.muerto:
             return  # No dibujamos el fantasma si está muerto
-        pyxel.blt(self.x, self.y, 1, 0, 0, 15, 15, pyxel.COLOR_RED)
+        pyxel.blt(self.x, self.y, 1, 0, 0, 15, 15, pyxel.COLOR_RED)"""
 
     def colision_con_pacman(self, pacman):
         # Si el fantasma está en (0, 0), lo ignoramos ya que está "muerto"
@@ -251,6 +251,33 @@ class Fantasma:
     def reset(self):
         self.x, self.y = self.punto_inicio
         self.muerto = False  # Asegurarse de que el fantasma no esté muerto al reiniciar
+
+class Blinky(Fantasma):
+    def draw(self):
+        if self.muerto:
+            return
+        pyxel.blt(self.x, self.y, 1, 0, 64, 15, 15, pyxel.COLOR_BLACK)  # Sprite de Blinky
+
+
+class Pinky(Fantasma):
+    def draw(self):
+        if self.muerto:
+            return
+        pyxel.blt(self.x, self.y, 1, 0, 0, 15, 15, pyxel.COLOR_BLACK)  # Sprite de Pinky
+
+
+class Inky(Fantasma):
+    def draw(self):
+        if self.muerto:
+            return
+        pyxel.blt(self.x, self.y, 1, 0, 32, 15, 15, pyxel.COLOR_BLACK)  # Sprite de Inky
+
+
+class Clyde(Fantasma):
+    def draw(self):
+        if self.muerto:
+            return
+        pyxel.blt(self.x, self.y, 1, 0, 96, 15, 15, pyxel.COLOR_BLACK)  # Sprite de Clyde
 
 class Consumible:
     def __init__(self, x, y, tipo):
@@ -360,6 +387,6 @@ pyxel.load("my_resource.pyxres")
 paredes, consumibles = generar_mapa()
 
 pacman = Pacman(2, False, 210, 90)
-fantasmas = [Fantasma(1, "abajo", 210, 155), Fantasma(1, "arriba", 210, 155), Fantasma(1, "abajo", 210, 150), Fantasma(1, "arriba", 210, 155)]
+fantasmas = [Blinky(1, "abajo", 210, 155), Pinky(1, "arriba", 210, 155), Inky(1, "abajo", 210, 150), Clyde(1, "arriba", 210, 155)]
 
 pyxel.run(update, draw)
