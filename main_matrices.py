@@ -31,12 +31,12 @@ MAPA2 = [
     [1, 2, 2, 1, 1, 2, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2, 1, 1, 2, 2, 1],
     [1, 2, 3, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1],
     [1, 2, 2, 2, 2, 2, 2, 2, 1, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 3, 1],
-    [1, 1, 1, 1, 2, 2, 1, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1],
+    [1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1],
     [1, 2, 2, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 1, 1, 2, 1, 2, 1, 2, 1],
     [1, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 1],
-    [1, 2, 1, 2, 2, 2, 2, 2, 1, 1, 2, 2, 1, 2, 2, 1, 2, 1, 2, 1, 2, 1],
+    [1, 2, 1, 2, 2, 2, 2, 1, 1, 1, 2, 2, 1, 2, 2, 1, 2, 1, 2, 1, 2, 1],
     [1, 2, 1, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1],
-    [1, 1, 1, 2, 1, 2, 2, 3, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 3, 1, 2, 1],
+    [1, 1, 1, 1, 1, 2, 2, 3, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 3, 1, 2, 1],
     [1, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1],
     [1, 2, 2, 1, 2, 2, 1, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1],
     [1, 4, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1],
@@ -74,13 +74,12 @@ game_over = False  # Variable para controlar el estado del juego
 inicio = True
 puntosmapa = 0
 puntospacman = 0
+vidaspacman = 3
 class Pacman:
     def __init__(self, velocidad: int, poder: bool, x, y):
         self.velocidad = velocidad
         self.poder = poder
         self.direccion = "arriba"
-        self.vidas = 3
-        self.puntos = 0
         self.x = x
         self.y = y
         self.tamano_colision = 8  # Tamaño de colisión (radio de Pac-Man)
@@ -274,10 +273,10 @@ class Consumible:
     def activar(self, pacman):
         global puntosmapa
         global puntospacman
+        global vidaspacman
         # Verificar si Pacman está en la misma posición que el consumible
         if abs(self.x - pacman.x) < pacman.tamano_colision * 2 and abs(self.y - pacman.y) < pacman.tamano_colision * 2:
             if self.tipo == 2:  # Punto
-                pacman.puntos += 1
                 puntospacman += 1
                 puntosmapa += 1
             elif self.tipo == 3:  # Power-up
@@ -285,9 +284,8 @@ class Consumible:
                 pacman.poder_tiempo = 600  # Duración del poder (en segundos)
                 pacman.velocidad = 3  # Aumentar la velocidad de Pacman
             elif self.tipo == 4:  # Fruta
-                pacman.puntos += 5
                 puntospacman += 5
-                pacman.vidas += 1
+                vidaspacman += 1
             return True  # Consumible activado
         return False  # No activado
 
@@ -312,14 +310,14 @@ def generar_mapa(pacman):
                     paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
                 elif valor in [2, 3, 4]:
                     consumibles.append(Consumible(x * 20 + 10, y * 20 + 10, valor))  # Ajustar posición al centro de la celda
-    if puntosmapa >= 192 and puntosmapa < 391:
+    if puntosmapa >= 192 and puntosmapa < 386:
         for y, fila in enumerate(MAPA2):
             for x, valor in enumerate(fila):
                 if valor == 1:
                     paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
                 elif valor in [2, 3, 4]:
                     consumibles.append(Consumible(x * 20 + 10, y * 20 + 10, valor))  # Ajustar posición al centro de la celda
-    if puntosmapa >= 391:
+    if puntosmapa >= 386:
         for y, fila in enumerate(MAPA3):
             for x, valor in enumerate(fila):
                 if valor == 1:
@@ -338,7 +336,8 @@ def update():
     global fantasmas  
     global puntosmapa
     global puntospacman
-    if puntosmapa == 192 or puntosmapa == 391:
+    global vidaspacman
+    if puntosmapa == 192 or puntosmapa == 386:
         n = 0
         while n < 1:
             inicio = True
@@ -357,17 +356,16 @@ def update():
             
         if pacman.poder and fantasma.colision_con_pacman(pacman):  # Si Pac-Man tiene poder
             fantasma.morir()  # Matar al fantasma
-            pacman.puntos += 10  # Ganar puntos por matar al fantasma (opcional)
             puntospacman += 10
 
         elif not pacman.poder and fantasma.colision_con_pacman(pacman):  # Si no tiene poder
-            pacman.vidas -= 1
+            vidaspacman -= 1
             pacman.x, pacman.y = 210, 90  # Reiniciar posición de Pac-Man
             for fantasma in fantasmas:
                 fantasma.reset()  # Reiniciar la posición de los fantasmas
 
     # Verificar si Pac-Man ha perdido todas las vidas
-    if pacman.vidas <= 0:
+    if vidaspacman <= 0:
         game_over = True  # Cambiar el estado del juego a 'terminado'
 
     # Mover fantasmas
@@ -403,6 +401,7 @@ def update():
     inicio = False
 def draw():
     global puntospacman
+    global vidaspacman
     if game_over:
         pyxel.cls(0)  # Limpiar la pantalla
         pyxel.text(pyxel.width // 2 - 20, pyxel.height // 2, "GAME OVER", pyxel.COLOR_RED)  # Mostrar el mensaje en rojo
@@ -415,7 +414,7 @@ def draw():
         consumible.draw()
     for pared in paredes:
         pared.draw()
-    pyxel.text(5, 385, f"Puntos: {puntospacman} Vidas: {pacman.vidas} Power-up: {int(pacman.poder_tiempo / 60)}", pyxel.COLOR_WHITE)
+    pyxel.text(5, 385, f"Puntos: {puntospacman} Vidas: {vidaspacman} Power-up: {int(pacman.poder_tiempo / 60)}", pyxel.COLOR_WHITE)
 
 
 # Inicialización del juego
