@@ -109,8 +109,6 @@ def generar_mapa(pacman):
     return paredes, consumibles
 
 def update():
-    global game_over  # Acceder a las variables globales
-    global inicio  
     global pacman  
     global paredes  
     global consumibles  
