@@ -77,6 +77,10 @@ import variables_globales as vg
 from pacman import Pacman
 from pared import Pared
 from fantasma import Fantasma
+from inky import Inky
+from blinky import Blinky
+from pinky import Pinky
+from clyde import Clyde
 from consumible import Consumible
 
 
@@ -174,8 +178,8 @@ def update():
         # Generar el mapa
         paredes, consumibles = generar_mapa(pacman)
 
-        fantasmas = [Fantasma(0.5, "izquierda", 200, 140, 1, 0, 0, 16, 16, pyxel.COLOR_GRAY), Fantasma(1, "arriba", 200, 140, 1, 0, 32, 16, 16, pyxel.COLOR_GRAY), Fantasma(1.5, "derecha", 200, 140, 1, 0, 64, 16, 16, pyxel.COLOR_GRAY), Fantasma(2, "arriba", 200, 140, 1, 0, 96, 16, 16, pyxel.COLOR_GRAY)]
-    
+        fantasmas = [Inky(), Blinky(), Pinky(), Clyde()]
+
     #verificar si pacman esta lleno
     if vg.vidaspacman >= 5 and not pacman.poder:
         pacman.velocidad = 0.5
@@ -215,7 +219,7 @@ pacman = Pacman(1.5, False, 210, 90)
 # Generar el mapa
 paredes, consumibles = generar_mapa(pacman)
 
-fantasmas = [Fantasma(0.5, "izquierda", 200, 140, 1, 0, 0, 16, 16, pyxel.COLOR_GRAY), Fantasma(1, "arriba", 200, 140, 1, 0, 32, 16, 16, pyxel.COLOR_GRAY), Fantasma(1.5, "derecha", 200, 140, 1, 0, 64, 16, 16, pyxel.COLOR_GRAY), Fantasma(2, "arriba", 200, 140, 1, 0, 96, 16, 16, pyxel.COLOR_GRAY)]
+fantasmas = [Inky(), Blinky(), Pinky(), Clyde()]
 
 
 
