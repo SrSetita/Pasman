@@ -63,7 +63,12 @@ class Fantasma:
     def draw(self):
         if self.muerto:
             return  # No dibujamos el fantasma si está muerto
-        pyxel.blt(self.x, self.y, self.pag, self.u, self.v, self.w, self.h, self.colkey)
+        #En funcion del frame en el que estemos, dibujará un sprite u otro.
+        if (pyxel.frame_count // 5) % 2 == 0: #Contamos los Frames y hacemos division entera.
+            pyxel.blt(self.x, self.y, self.pag, self.u, self.v, self.w, self.h, self.colkey)  # Dibuja la primera imagen
+        else:
+            pyxel.blt(self.x, self.y, self.pag, self.u + 16, self.v, self.w, self.h, self.colkey)   # Dibuja la segunda imagen
+        
 
     def colision_con_pacman(self, pacman):
         # Si el fantasma está en (0, 0), lo ignoramos ya que está "muerto"
