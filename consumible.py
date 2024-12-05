@@ -8,9 +8,6 @@ class Consumible:
         self.tipo = tipo
 
     def activar(self, pacman):
-        global puntosmapa
-        global puntospacman
-        global vidaspacman
         # Verificar si Pacman está en la misma posición que el consumible
         if abs(self.x - pacman.x) < pacman.tamano_colision * 2 and abs(self.y - pacman.y) < pacman.tamano_colision * 2:
             if self.tipo == 2:  # Punto
