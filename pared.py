@@ -1,5 +1,6 @@
 import pyxel
 import random
+import variables_globales as vg
 class Pared:
     def __init__(self, posicionX: int, posicionY: int, ancho: int, alto: int):
         self.posicionX = posicionX
@@ -16,4 +17,9 @@ class Pared:
         return False
 
     def draw(self):
-        pyxel.blt(self.posicionX, self.posicionY,0,0,0, self.ancho, self.alto, pyxel.COLOR_GRAY)
+        if vg.puntosmapa < 192:
+            pyxel.blt(self.posicionX, self.posicionY,0,0,0, self.ancho, self.alto, pyxel.COLOR_GRAY)
+        if vg.puntosmapa >= 192 and vg.puntosmapa< 386:
+            pyxel.blt(self.posicionX, self.posicionY,0,21,0, self.ancho, self.alto, pyxel.COLOR_GRAY)
+        if vg.puntosmapa >= 386:
+            pyxel.blt(self.posicionX, self.posicionY,0,0,21, self.ancho, self.alto, pyxel.COLOR_GRAY)
