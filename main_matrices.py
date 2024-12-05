@@ -144,14 +144,7 @@ def update():
             pacman.x, pacman.y = 210, 90  # Reiniciar posición de Pac-Man
             for fantasma in fantasmas:
                 fantasma.reset()  # Reiniciar la posición de los fantasmas
-
-    # Verificar si Pac-Man ha perdido todas las vidas
-    if vg.vidaspacman <= 0:
-        vg.game_over = True  # Cambiar el estado del juego a 'terminado'
-
-    # Mover fantasmas
-    for fantasma in fantasmas:
-        if pacman.poder:
+        if pacman.poder: #lineas para movimiento del fantasma
             fantasma.debil()
         else:
             fantasma.velocidad = fantasma.velocidad_original
@@ -163,6 +156,11 @@ def update():
                 fantasma.reaparecer()  # Reaparecer el fantasma
         else:
             fantasma.mover(paredes)
+
+    # Verificar si Pac-Man ha perdido todas las vidas
+    if vg.vidaspacman <= 0:
+        vg.game_over = True  # Cambiar el estado del juego a 'terminado'
+
 
     # Verificar si Pac-Man recoge consumibles
     consumibles_restantes = []
