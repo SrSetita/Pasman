@@ -26,7 +26,7 @@ MAPA = [
 
 MAPA2 = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 1, 1],
+    [1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1],
     [1, 1, 2, 2, 1, 2, 2, 1, 2, 1, 2, 3, 1, 2, 1, 2, 2, 1, 2, 2, 1, 1],
     [1, 2, 2, 1, 1, 2, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2, 1, 1, 2, 2, 1],
     [1, 2, 3, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1],
@@ -54,16 +54,16 @@ MAPA3 = [
     [1, 2, 1, 1, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1],
     [1, 2, 1, 1, 2, 2, 1, 1, 2, 1, 2, 2, 2, 1, 2, 2, 1, 1, 1, 2, 3, 1],
     [1, 2, 1, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 2, 2, 2, 1, 2, 2, 1, 1],
-    [1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1],
+    [1, 2, 2, 2, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1],
     [1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 2, 2, 1, 2, 2, 1, 2, 2, 2, 1, 1, 1],
     [2, 2, 1, 1, 1, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 1, 1, 1, 2, 2, 2, 2],
     [2, 2, 1, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 1, 2, 1, 1, 1, 2, 2],
-    [2, 2, 1, 2, 2, 2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 2, 2, 2, 2, 3, 2],
+    [2, 2, 1, 2, 2, 2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 2, 2, 2, 2, 2, 2],
     [1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1],
     [1, 2, 2, 2, 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 2, 2, 1, 1],
     [1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1],
     [1, 2, 1, 2, 2, 2, 1, 2, 1, 1, 2, 2, 1, 1, 1, 2, 2, 1, 1, 1, 2, 1],
-    [1, 1, 1, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1],
+    [1, 1, 1, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 3, 1],
     [1, 1, 1, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 1, 2, 2, 1, 1],
     [1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -83,7 +83,6 @@ from pinky import Pinky
 from clyde import Clyde
 from consumible import Consumible
 
-
 # Función para crear objetos a partir de la matriz
 def generar_mapa(pacman):
     paredes = []
@@ -95,14 +94,14 @@ def generar_mapa(pacman):
                     paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
                 elif valor in [2, 3, 4]:
                     consumibles.append(Consumible(x * 20 + 10, y * 20 + 10, valor))  # Ajustar posición al centro de la celda
-    if vg.puntosmapa >= 192 and vg.puntosmapa < 386:
+    if vg.puntosmapa >= 192 and vg.puntosmapa < 388:
         for y, fila in enumerate(MAPA2):
             for x, valor in enumerate(fila):
                 if valor == 1:
                     paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
                 elif valor in [2, 3, 4]:
                     consumibles.append(Consumible(x * 20 + 10, y * 20 + 10, valor))  # Ajustar posición al centro de la celda
-    if vg.puntosmapa >= 386:
+    if vg.puntosmapa >= 388:
         for y, fila in enumerate(MAPA3):
             for x, valor in enumerate(fila):
                 if valor == 1:
@@ -113,17 +112,19 @@ def generar_mapa(pacman):
     return paredes, consumibles
 
 def update():
+    global game_over  # Acceder a las variables globales
+    global inicio  
     global pacman  
     global paredes  
     global consumibles  
     global fantasmas  
     global victoria
-    if vg.puntosmapa == 192 or vg.puntosmapa == 386:
+    if vg.puntosmapa == 192 or vg.puntosmapa == 388:
         n = 0
         while n < 1:
             vg.inicio = True
             n += 1
-    if vg.puntosmapa == 614:
+    if vg.puntosmapa == 615:
         vg.victoria = True
     if vg.victoria:
         return
@@ -148,7 +149,14 @@ def update():
             pacman.x, pacman.y = 210, 90  # Reiniciar posición de Pac-Man
             for fantasma in fantasmas:
                 fantasma.reset()  # Reiniciar la posición de los fantasmas
-        if pacman.poder: #lineas para movimiento del fantasma
+
+    # Verificar si Pac-Man ha perdido todas las vidas
+    if vg.vidaspacman <= 0:
+        vg.game_over = True  # Cambiar el estado del juego a 'terminado'
+
+    # Mover fantasmas
+    for fantasma in fantasmas:
+        if pacman.poder:
             fantasma.debil()
         else:
             fantasma.velocidad = fantasma.velocidad_original
@@ -159,12 +167,7 @@ def update():
             if fantasma.muerte_tiempo <= 0:
                 fantasma.reaparecer()  # Reaparecer el fantasma
         else:
-            fantasma.mover(paredes)
-
-    # Verificar si Pac-Man ha perdido todas las vidas
-    if vg.vidaspacman <= 0:
-        vg.game_over = True  # Cambiar el estado del juego a 'terminado'
-
+            fantasma.mover(pacman, paredes)
 
     # Verificar si Pac-Man recoge consumibles
     consumibles_restantes = []

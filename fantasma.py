@@ -1,7 +1,15 @@
 import pyxel
+import math
 import random
+from pacman import Pacman
+
+def calcular_modulo(x1, y1, x2, y2): #esto se utilizara mas adelante para el movimiento de los fantasmas.
+        distancia = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+        return distancia
+
+
 class Fantasma:
-    def __init__(self, velocidad: int, direccion, x, y, pag, u, v, w, h, colkey):
+    def __init__(self, velocidad: int, direccion, x, y, pag, u, v, w, h, t, c, colkey):
         self.muerte_tiempo = 0  # Temporizador para la muerte
         self.velocidad = velocidad
         self.direccion = direccion
@@ -12,16 +20,58 @@ class Fantasma:
         self.v = v
         self.w = w
         self.h = h
+        self.direccion_temp = t #temporizador que marca cuanto tiempo deben mantener la dirección los fantasmas
+        self.comportamiento = c #Variable personal de cada fantasma que indica cada cuantos frames cambian de direccion.
         self.colkey = colkey
         self.velocidad_original = velocidad
         self.u_original = u
         self.v_original = v
         self.punto_inicio = (x, y)  # Guardar el punto de inicio
         self.muerto = False  # El fantasma no está muerto por defecto
+         #atributo para contar cuantos segundos debe mantener la dirección aleatoria
 
-    def mover(self, paredes):
+
+    def optimo(self, pacman):
+        #Esta funcion calcula cual es el mejor movimiento que puede hacer el fantasma
+        #se le suman 20 porque es lo que miden nuestras casillas.
+        # Cálculo de las distancias con desplazamientos
+        result1 = calcular_modulo(self.x + 20, self.y, pacman.x, pacman.y)
+        result2 = calcular_modulo(self.x - 20, self.y, pacman.x, pacman.y)
+        result3 = calcular_modulo(self.x, self.y + 20, pacman.x, pacman.y)
+        result4 = calcular_modulo(self.x, self.y - 20, pacman.x, pacman.y)
+
+        if pacman.poder == True: # Determina el camino más lejos de pacman
+            opción = min(result1, result2, result3, result4)
+            if opción == result1:
+                return "izquierda"
+            elif opción == result2:
+                return "derecha"
+            elif opción == result3:
+                return "arriba"
+            else: 
+                return "abajo"
+        else: # Determina el camino más cerca de pacman
+            opción = max(result1, result2, result3, result4)
+            if opción == result1:
+                return "izquierda"
+            elif opción == result2:
+                return "derecha"
+            elif opción == result3:
+                return "arriba"
+            else: 
+                return "abajo"
+
+
+      
+    def mover(self, pacman, paredes):
         if self.muerto:  # Si está muerto, no se mueve
             return
+        
+        if self.direccion_temp > 0:
+            self.direccion_temp -= 1
+        else:
+            # Calcula la mejor dirección cuando no está bajo el efecto del temporizador
+            self.direccion = self.optimo(pacman)
 
         nueva_x, nueva_y = self.x, self.y
     
@@ -42,6 +92,7 @@ class Fantasma:
 
         if colision:
             self.cambiar_direccion()
+            self.direccion_temp = self.comportamiento
         else:
             self.x, self.y = nueva_x, nueva_y
         #teletransporte si borde
