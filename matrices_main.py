@@ -164,7 +164,7 @@ def update():
             if fantasma.muerte_tiempo <= 0:
                 fantasma.reaparecer()  # Reaparecer el fantasma
         else:
-            fantasma.mover(paredes)
+            fantasma.mover(pacman, paredes)
 
     # Verificar si Pac-Man recoge consumibles
     consumibles_restantes = []
