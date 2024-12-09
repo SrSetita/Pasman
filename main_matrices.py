@@ -5,7 +5,7 @@ MAPA = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 1],
     [1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1],
-    [1, 2, 3, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1],
+    [1, 2, 3, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
     [1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1],
     [1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1],
     [1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1],
@@ -90,7 +90,7 @@ from power_up import PowerUp
 def generar_mapa(pacman):
     paredes = []
     consumibles = []
-    if vg.puntosmapa < 193:
+    if vg.puntosmapa < 194:
         for y, fila in enumerate(MAPA):
             for x, valor in enumerate(fila):
                 if valor == 1:
@@ -101,7 +101,7 @@ def generar_mapa(pacman):
                     consumibles.append(PowerUp(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
                 elif valor == 4:
                     consumibles.append(Fruta(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
-    if vg.puntosmapa >= 193 and vg.puntosmapa < 390:
+    if vg.puntosmapa >= 194 and vg.puntosmapa < 391:
         for y, fila in enumerate(MAPA2):
             for x, valor in enumerate(fila):
                 if valor == 1:
@@ -112,7 +112,7 @@ def generar_mapa(pacman):
                     consumibles.append(PowerUp(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
                 elif valor == 4:
                     consumibles.append(Fruta(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
-    if vg.puntosmapa >= 390:
+    if vg.puntosmapa >= 391:
         for y, fila in enumerate(MAPA3):
             for x, valor in enumerate(fila):
                 if valor == 1:
@@ -132,12 +132,12 @@ def update():
     global consumibles  
     global fantasmas  
     global victoria
-    if vg.puntosmapa == 193 or vg.puntosmapa == 390:
+    if vg.puntosmapa == 194 or vg.puntosmapa == 391:
         n = 0
         while n < 1:
             vg.inicio = True
             n += 1
-    if vg.puntosmapa == 617:
+    if vg.puntosmapa == 618:
         vg.victoria = True
     if vg.victoria:
         return
