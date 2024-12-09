@@ -82,6 +82,9 @@ from blinky import Blinky
 from pinky import Pinky
 from clyde import Clyde
 from consumible import Consumible
+from punto import Punto
+from fruta import Fruta
+from power_up import PowerUp
 
 # Función para crear objetos a partir de la matriz
 def generar_mapa(pacman):
@@ -92,28 +95,38 @@ def generar_mapa(pacman):
             for x, valor in enumerate(fila):
                 if valor == 1:
                     paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
-                elif valor in [2, 3, 4]:
-                    consumibles.append(Consumible(x * 20 + 10, y * 20 + 10, valor))  # Ajustar posición al centro de la celda
+                elif valor == 2:
+                    consumibles.append(Punto(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
+                elif valor == 3:
+                    consumibles.append(PowerUp(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
+                elif valor == 4:
+                    consumibles.append(Fruta(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
     if vg.puntosmapa >= 193 and vg.puntosmapa < 390:
         for y, fila in enumerate(MAPA2):
             for x, valor in enumerate(fila):
                 if valor == 1:
                     paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
-                elif valor in [2, 3, 4]:
-                    consumibles.append(Consumible(x * 20 + 10, y * 20 + 10, valor))  # Ajustar posición al centro de la celda
+                elif valor == 2:
+                    consumibles.append(Punto(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
+                elif valor == 3:
+                    consumibles.append(PowerUp(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
+                elif valor == 4:
+                    consumibles.append(Fruta(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
     if vg.puntosmapa >= 390:
         for y, fila in enumerate(MAPA3):
             for x, valor in enumerate(fila):
                 if valor == 1:
                     paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
-                elif valor in [2, 3, 4]:
-                    consumibles.append(Consumible(x * 20 + 10, y * 20 + 10, valor))  # Ajustar posición al centro de la celda
+                elif valor == 2:
+                    consumibles.append(Punto(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
+                elif valor == 3:
+                    consumibles.append(PowerUp(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
+                elif valor == 4:
+                    consumibles.append(Fruta(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
 
     return paredes, consumibles
 
 def update():
-    global game_over  # Acceder a las variables globales
-    global inicio  
     global pacman  
     global paredes  
     global consumibles  
