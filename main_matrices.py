@@ -86,43 +86,29 @@ from punto import Punto
 from fruta import Fruta
 from power_up import PowerUp
 
+def procesar_fila(mapa, paredes, consumibles):
+    for y, fila in enumerate(mapa):
+        for x, valor in enumerate(fila):
+            if valor == 1:
+                paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
+            elif valor == 2:
+                consumibles.append(Punto(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
+            elif valor == 3:
+                consumibles.append(PowerUp(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
+            elif valor == 4:
+                consumibles.append(Fruta(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
+
 # Función para crear objetos a partir de la matriz
 def generar_mapa(pacman):
     paredes = []
     consumibles = []
+    
     if vg.puntosmapa < 194:
-        for y, fila in enumerate(MAPA):
-            for x, valor in enumerate(fila):
-                if valor == 1:
-                    paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
-                elif valor == 2:
-                    consumibles.append(Punto(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
-                elif valor == 3:
-                    consumibles.append(PowerUp(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
-                elif valor == 4:
-                    consumibles.append(Fruta(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
-    if vg.puntosmapa >= 194 and vg.puntosmapa < 391:
-        for y, fila in enumerate(MAPA2):
-            for x, valor in enumerate(fila):
-                if valor == 1:
-                    paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
-                elif valor == 2:
-                    consumibles.append(Punto(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
-                elif valor == 3:
-                    consumibles.append(PowerUp(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
-                elif valor == 4:
-                    consumibles.append(Fruta(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
-    if vg.puntosmapa >= 391:
-        for y, fila in enumerate(MAPA3):
-            for x, valor in enumerate(fila):
-                if valor == 1:
-                    paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
-                elif valor == 2:
-                    consumibles.append(Punto(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
-                elif valor == 3:
-                    consumibles.append(PowerUp(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
-                elif valor == 4:
-                    consumibles.append(Fruta(x * 20 + 10, y * 20 + 10))  # Ajustar posición al centro de la celda
+        procesar_fila(MAPA, paredes, consumibles)
+    elif vg.puntosmapa >= 194 and vg.puntosmapa < 391:
+        procesar_fila(MAPA2, paredes, consumibles)
+    elif vg.puntosmapa >= 391:
+        procesar_fila(MAPA3, paredes, consumibles)
 
     return paredes, consumibles
 
