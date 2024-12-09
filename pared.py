@@ -19,7 +19,7 @@ class Pared:
     def draw(self):
         if vg.puntosmapa < 193:
             pyxel.blt(self.posicionX, self.posicionY,0,0,0, self.ancho, self.alto, pyxel.COLOR_GRAY)
-        if vg.puntosmapa >= 193 and vg.puntosmapa< 389:
+        if vg.puntosmapa >= 193 and vg.puntosmapa< 390:
             pyxel.blt(self.posicionX, self.posicionY,0,21,21, self.ancho, self.alto, pyxel.COLOR_GRAY)
-        if vg.puntosmapa >= 389:
+        if vg.puntosmapa >= 390:
             pyxel.blt(self.posicionX, self.posicionY,0,0,21, self.ancho, self.alto, pyxel.COLOR_GRAY)
