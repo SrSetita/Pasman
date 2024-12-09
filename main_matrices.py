@@ -12,7 +12,7 @@ MAPA = [
     [1, 4, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
     [1, 1, 1, 2, 1, 1, 1, 2, 1, 0, 0, 0, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1],
     [1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 3, 2, 2, 2, 2, 2, 2, 1],
-    [1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1],
+    [1, 2, 1, 2, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1],
     [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
     [1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1],
     [1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 1],
@@ -30,7 +30,7 @@ MAPA2 = [
     [1, 1, 2, 2, 1, 2, 2, 1, 2, 1, 2, 3, 1, 2, 1, 2, 2, 1, 2, 2, 1, 1],
     [1, 2, 2, 1, 1, 2, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2, 1, 1, 2, 2, 1],
     [1, 2, 3, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1],
-    [1, 2, 2, 2, 2, 2, 2, 2, 1, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 3, 1],
+    [1, 2, 2, 2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 3, 1],
     [1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1],
     [1, 2, 2, 1, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 1, 1, 2, 1, 2, 1, 2, 1],
     [1, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 1],
@@ -94,14 +94,14 @@ def generar_mapa(pacman):
                     paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
                 elif valor in [2, 3, 4]:
                     consumibles.append(Consumible(x * 20 + 10, y * 20 + 10, valor))  # Ajustar posición al centro de la celda
-    if vg.puntosmapa >= 193 and vg.puntosmapa < 389:
+    if vg.puntosmapa >= 193 and vg.puntosmapa < 390:
         for y, fila in enumerate(MAPA2):
             for x, valor in enumerate(fila):
                 if valor == 1:
                     paredes.append(Pared(x * 20, y * 20, 20, 20))  # Tamaño de cada celda 20x20
                 elif valor in [2, 3, 4]:
                     consumibles.append(Consumible(x * 20 + 10, y * 20 + 10, valor))  # Ajustar posición al centro de la celda
-    if vg.puntosmapa >= 389:
+    if vg.puntosmapa >= 390:
         for y, fila in enumerate(MAPA3):
             for x, valor in enumerate(fila):
                 if valor == 1:
@@ -119,12 +119,12 @@ def update():
     global consumibles  
     global fantasmas  
     global victoria
-    if vg.puntosmapa == 193 or vg.puntosmapa == 389:
+    if vg.puntosmapa == 193 or vg.puntosmapa == 390:
         n = 0
         while n < 1:
             vg.inicio = True
             n += 1
-    if vg.puntosmapa == 616:
+    if vg.puntosmapa == 617:
         vg.victoria = True
     if vg.victoria:
         return
