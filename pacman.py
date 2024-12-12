@@ -7,7 +7,7 @@ class Pacman:
         self.direccion = "arriba"
         self.x = x
         self.y = y
-        self.tamano_colision = 8  # Tamaño de colisión (radio de Pac-Man)
+        self.tamaño_colision = 8  # Tamaño de colisión (radio de Pac-Man)
         self.poder = False  # Si Pacman tiene poder
         self.poder_tiempo = 0  # Temporizador del poder
     
@@ -33,7 +33,7 @@ class Pacman:
 
         # Verificar si la nueva posición colisiona con alguna pared
         for pared in paredes:
-            if pared.detectar_colision_en_posicion(nueva_x, nueva_y, self.tamano_colision):
+            if pared.detectar_colision_en_posicion(nueva_x, nueva_y, self.tamaño_colision):
                 return  # No mover si hay colisión con una pared
 
         #teletransporte si borde
@@ -62,7 +62,7 @@ class Pacman:
 
     def draw(self):
         pyxel.cls(0)
-        pyxel.circ(self.x, self.y, self.tamano_colision, pyxel.COLOR_YELLOW)
+        pyxel.circ(self.x, self.y, self.tamaño_colision, pyxel.COLOR_YELLOW)
         if self.direccion == "derecha":
             pyxel.tri(self.x, self.y, self.x + 8, self.y - 4, self.x + 8, self.y + 4, 0)
         elif self.direccion == "abajo":

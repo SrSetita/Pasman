@@ -126,7 +126,7 @@ class Fantasma:
         if self.x == 0 and self.y == 0:
             return False
         
-        if abs(self.x - pacman.x) < pacman.tamano_colision * 2 and abs(self.y - pacman.y) < pacman.tamano_colision * 2:
+        if abs(self.x - pacman.x) < pacman.tamaño_colision * 2 and abs(self.y - pacman.y) < pacman.tamaño_colision * 2:
             return True
         return False
 
